@@ -1,0 +1,29 @@
+<head>
+    <link rel="stylesheet" href="/css/styleDashboard.min.css">
+</head>
+<body>
+    <main>
+        <a href="/users/logout">
+            <button class="button">
+                <a href="/users/logout" class="router"><i class="fas fa-sign-out-alt"></i> Log out</a>
+            </button>
+        </a>
+        <a href="https://fast--typing.herokuapp.com/" class="logo-href"><h1 class="logo">FastTyping</h1></a>
+
+        <h2>Dashboard <span class="info-user"><%= name %></span></h2>
+        <div class="info">
+            <h1 class="info-h1">INFO</h1>
+            <div class="info-elements">
+                <p class="info-element">email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><%= email %></span></p>
+                <p class="info-element">ID user: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span><%= _id %></span></p>
+                <p class="info-element">Date registered: &nbsp;<span><%= date %></span></p>
+                <div class="info-best">
+                    <p>Record for 15 seconds : <span class="info-user"><%- bestWPM15%>wpm with <%- accuracy15%>% accuracy</span></p>
+                    <p>Record for 60 seconds : <span class="info-user"><%- bestWPM60%>wpm with <%- accuracy60%>% accuracy</span></p>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+</body>

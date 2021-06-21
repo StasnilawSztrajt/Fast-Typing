@@ -19,9 +19,9 @@
 export default {
     name: 'Menu',
     props: {
-        layerSett:    Boolean,
+        layerSett:     Boolean,
         layerTopUsers: Boolean,
-        infoUser:     Object,
+        infoUser:      Object,
     },
     methods: {
         showLayerSett(){
@@ -34,7 +34,7 @@ export default {
 }
 </script>
 <style lang="scss">
-@import '../scss/variables';
+@import '../../scss/variables.scss';
 
 nav{
     text-align: center;

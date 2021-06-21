@@ -1,41 +1,40 @@
 <template>
     <div class="topUsersLayer" v-show="layerTopUsers">
-            <div class="flexCross">
-                <i class="fas fa-times sett cross" @click="showLayerTopUsers"></i>
-            </div>
-            <h1><i class="fas fa-crown"></i> Global Ranking users FastTyping<i class="fas fa-crown"></i></h1>
-                <div class="topUsers">
-                        <div class="topUsers15">
-                            <tr class="titleTr">
-                                <td>Rank </td>
-                                <td>Name </td>
-                                <td>Time: 15</td>
-                                <td>Accuracy </td>
+        <div class="flexCross">
+            <i class="fas fa-times sett cross" @click="showLayerTopUsers"></i>
+        </div>
+        <h1><i class="fas fa-crown"></i> Global Ranking users FastTyping<i class="fas fa-crown"></i></h1>
+            <div class="topUsers">
+                <div class="topUsers15">
+                    <tr class="titleTr">
+                        <td>Rank </td>
+                        <td>Name </td>
+                        <td>Time: 15</td>
+                        <td>Accuracy </td>
 
-                            </tr>
-                            <tr v-for="(user, index) in topUsers15" :key="user._id" class="topUsers15Tr">
-                                <td class="userPositiontd">{{ index + 1 }}</td>
-                                <td >{{ user.name }} </td>
-                                <td class="userWPMtd">{{ user.bestWPM15 }}wpm &nbsp;</td>
-                                <td>{{ user.accuracy15 }}%</td>
-                            </tr>
-                            </div>
-                        <div class="topUsers60">
-                            <tr class="titleTr">
-                                <td>Rank </td>
-                                <td>Name </td>
-                                <td>Time: 60 </td>
-                                <td>Accuracy </td>
-                            </tr>
-                            <tr v-for="(user, index) in topUsers60" :key="user._id" class="topUsers60Tr">
-                                <td class="userPositiontd">{{ index + 1 }}</td>
-                                <td >{{ user.name }}</td>
-                                <td class="userWPMtd">{{ user.bestWPM60 }}wpm &nbsp;</td>
-                                <td>{{ user.accuracy60 }}%</td>
-                            </tr>
-                        </div>
-
+                    </tr>
+                    <tr v-for="(user, index) in topUsers15" :key="user._id" class="topUsers15Tr">
+                        <td class="userPositiontd">{{ index + 1 }}</td>
+                        <td >{{ user.name }} </td>
+                        <td class="userWPMtd">{{ user.bestWPM15 }}wpm &nbsp;</td>
+                        <td>{{ user.accuracy15 }}%</td>
+                    </tr>
+                    </div>
+                <div class="topUsers60">
+                    <tr class="titleTr">
+                        <td>Rank </td>
+                        <td>Name </td>
+                        <td>Time: 60 </td>
+                        <td>Accuracy </td>
+                    </tr>
+                    <tr v-for="(user, index) in topUsers60" :key="user._id" class="topUsers60Tr">
+                        <td class="userPositiontd">{{ index + 1 }}</td>
+                        <td >{{ user.name }}</td>
+                        <td class="userWPMtd">{{ user.bestWPM60 }}wpm &nbsp;</td>
+                        <td>{{ user.accuracy60 }}%</td>
+                    </tr>
                 </div>
+            </div>
         </div>
 </template>
 
@@ -55,7 +54,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../scss/variables';
+@import '../../scss/variables.scss';
 
 
     .topUsersLayer{

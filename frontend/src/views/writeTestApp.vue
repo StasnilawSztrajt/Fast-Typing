@@ -10,38 +10,59 @@
         @show-layer-sett="showLayerSett"
         @show-layer-top-users="showLayerTopUsers"
       />
-      <Settings
-        :layerSett="layerSett"
-        :showScore="showScore"
-        :showKeyboard="showKeyboard"
-        :languagesArray="languagesArray"
-        :timeToChangeArray="timeToChangeArray"
-        :alertSuccess="alertSuccess"
-        :alphabetArray="alphabetArray"
-        :keyboard="keyboard"
-        :keyboardQWERTY="keyboardQWERTY"
-        :keyboardDVORAK="keyboardDVORAK"
-        :keyboardCOLEMAK="keyboardCOLEMAK"
-        :keyboardWORKMAN="keyboardWORKMAN"
-        :alphabetTip="alphabetTip"
-        :keyboardTip="keyboardTip"
-        :value="value"
-        @show-layer-sett="showLayerSett"
-        @show-layer-top-users="showLayerTopUsers"
-        @change-language="changeLanguage"
-        @change-language-alphabet="changeLanguageAlphabet"
-        @change-time-spent="changeTimeSpent"
-        @change-time-spent-optional="changeTimeSpentOptional"
-        @change-type-of-writing1="changeTypeOfWriting1"
-        @change-type-of-writing2="changeTypeOfWriting2"
-        @show-live-score="showLiveScore"
-        @show-keyboard-function="showKeyboardFunction"
-        @close-alert="closeAlert"
-        @change-layout="changeLayout"
-        @show-alphabet-tip="showAlphabetTip"
-        @show-keyboard-tip="showKeyboardTip"
-        @input="value = $event.target.value"
-      />
+      <div class="settings">
+        <div class="settings-blur" v-show="alphabetTip"></div>
+        <AlphabetTip
+          :alphabetTip="alphabetTip"
+          @show-alphabet-tip="showAlphabetTip"
+        />
+        <div class="setting" v-show="layerSett">
+          <SuccessAlert
+            :alertSuccess="alertSuccess"
+            @close-alert="closeAlert"
+          />
+          <CrossToCloseSettings
+            @show-layer-sett="showLayerSett"
+          />
+          <div class="setting-flex">
+            <div class="grid-elements">
+              <LanguagesSettings
+                :languagesArray="languagesArray"
+                @change-language="changeLanguage"
+              />
+              <AlphabetForLearnSettings
+                :alphabetArray="alphabetArray"
+                @show-alphabet-tip="showAlphabetTip"
+                @change-language-alphabet="changeLanguageAlphabet"
+              />
+              <TimeSettings
+                :timeToChangeArray="timeToChangeArray"
+                @change-time-spent="changeTimeSpent"
+                @change-time-spent-optional="changeTimeSpentOptional"
+                @input="valueTimeSpentOptional = $event.target.value"
+              />
+              <WritingSettings
+                @change-type-of-writing1="changeTypeOfWriting1"
+                @change-type-of-writing2="changeTypeOfWriting2"
+              />
+              <LiveScoreSettings
+                :showScore="showScore"
+                @show-live-score="showLiveScore"
+              />
+              <ScreenKeyboardSettings
+                :showKeyboard="showKeyboard"
+                :keyboardQWERTY="keyboardQWERTY"
+                :keyboardDVORAK="keyboardDVORAK"
+                :keyboardCOLEMAK="keyboardCOLEMAK"
+                :keyboardWORKMAN="keyboardWORKMAN"
+                @show-alphabet-tip="showAlphabetTip"
+                @show-keyboard-function="showKeyboardFunction"
+                @change-keyboard-layout="changeKeyboardLayout"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
       <TopUsers
         :topUsers15="topUsers15"
         :topUsers60="topUsers60"
@@ -54,8 +75,6 @@
       :style="opacityStart"
       v-show="showKeyboardBool"
     />
-
-
     <main v-show="showMain">
       <EndScore
         v-if="endTest"
@@ -71,40 +90,35 @@
         :endTest="endTest"
         :timeSpent="timeSpent"
         />
-      <Alerts
-          :style="opacityStart"
-          v-show="focusInput"
-          @focus-input-on-click="focusInputOnClick"
+      <AlertsFocus
+        :style="opacityStart"
+        v-show="focusInput"
+        @focus-input-on-click="focusInputOnClick"
       />
 
       <div class="allWords" :style="opacityStart" @click="focusInputOnClick">
+        <div class="lineBehindLetter" :style="marginLineBehindLetter"></div>
+        <div class="firstWord" :style="marginWordAfterKeyup">
+          <FirstWord
+            :natural="natural"
+            :letter="letter"
+            :wordsOnPage="wordsOnPage"
+            v-for="letter in wordsOnPage[0].letters"
+            :key="letter.id"
+          />
 
-      <div class="lineBehindLetter" :style="marginLineBehindLetter"></div>
+          <ExcessLetters 
+            :excessLetters="excessLetters"
+          />
+        </div>
 
-      <div class="firstWord" :style="marginWordAfterKeyup">
-        <FirstWord
-          :natural="natural"
-          :letter="letter"
-          :wordsOnPage="wordsOnPage"
-          v-for="letter in wordsOnPage[0].letters"
-          :key="letter.id"
-        />
-
-        <span
-          class="excessLetters"
-          v-for="(letter, index) in excessLetters"
-          :key="index">
-          {{ letter }}
-        </span>
-      </div>
-
-      <div class="subWords">
-        <Words
-          :word="word"
-          v-for="word in wordsOnPage"
-          :key="word.id"
-        />
-      </div>
+        <div class="subWords">
+          <Words
+            :word="word"
+            v-for="word in wordsOnPage"
+            :key="word.id"
+          />
+        </div>
       </div>
 
       <div class="elements">
@@ -157,15 +171,25 @@ import axios from 'axios'
 // importowanie Componentow
 // importing Components
 
+import Menu from '../components/Menu/Menu';
+import AlphabetTip from '../components/Menu/Settings/AlphabetTip';
+import SuccessAlert from '../components/Menu/Settings/SuccessAlert';
+import CrossToCloseSettings from '../components/Menu/Settings/CrossToCloseSettings';
+import LanguagesSettings from '../components/Menu/Settings/LanguagesSettings';
+import AlphabetForLearnSettings from '../components/Menu/Settings/AlphabetForLearnSettings';
+import TimeSettings from '../components/Menu/Settings/TimeSettings';
+import WritingSettings from '../components/Menu/Settings/WritingSettings';
+import LiveScoreSettings from '../components/Menu/Settings/LiveScoreSettings';
+import ScreenKeyboardSettings from '../components/Menu/Settings/ScreenKeyboardSettings';
 
-import Menu from '../components/Menu';
-import Settings from '../components/Settings';
-import TopUsers from '../components/TopUsers';
 
-import ScreenKeyboard from '../components/ScreenKeyboard';
-import Alerts from '../components/Alerts';
+import TopUsers from '../components/Menu/TopUsers';
+
+import ScreenKeyboard from '../components/Menu/Settings/ScreenKeyboard';
+import AlertsFocus from '../components/AlertsFocus';
 
 import FirstWord from '../components/FirstWord';
+import ExcessLetters from '../components/ExcessLetters';
 import Words from '../components/Words';
 
 import EndScore from '../components/EndScore';
@@ -225,17 +249,26 @@ export default {
   // Uploading imported components to components
   components: {
     Menu,
-    Settings,
+    AlphabetTip,
+    SuccessAlert,
+    CrossToCloseSettings,
+    LanguagesSettings,
+    AlphabetForLearnSettings,
+    TimeSettings,
+    WritingSettings,
+    LiveScoreSettings,
+    ScreenKeyboardSettings,
     TopUsers,
     ScreenKeyboard,
-    Alerts,
+    AlertsFocus,
     FirstWord,
+    ExcessLetters,
     Words,
     ReloadButton,
     TimeSpentButton,
     Shortcut,
     EndScore,
-    Scores,
+    Scores
   },
   data() {
     // Zmienne w aplikacji
@@ -248,6 +281,7 @@ export default {
       IDuser: '',
       _id: '',
       infoUser: {},
+      endPoint: 'https://api-fast--typing.herokuapp.com',
 
       // Tablica , w której znajdują sie nazwy jezykow oraz ich plik .json
       // Array include the names of the languages and their .json file
@@ -419,12 +453,12 @@ export default {
       valueInputLength: 0,
       timeSpent: 60,
       timeSpentPlus: 0,
-      value: '',
+      valueTimeSpentOptional: '',
       disabled: false,
       focusInput: false,
       timeDebounce: 60,
       timeToTypeStorage: 60,
-      excessLetters: '',
+      excessLetters: [],
 
       // zmienne dla : v-show / v-if / :class
       // variables for : v-show / v-if / :class
@@ -830,6 +864,42 @@ export default {
     }
   },
 
+  // funkje ktore wywołują się po załadowaniu stronu
+  // functions that are called when the page is loaded
+  async created() {
+    this.keyboard =  this.keyboardQWERTY
+    this.loadWords();
+
+    // pobiera informacji o użytkowniku
+    // gets user information user information
+    await axios
+    .get(`${this.endPoint}/dashboard.json`)
+    .then((response) => {
+      this.IDuser = response.data.user._id;
+    })
+    .catch(() =>{
+      this.IDuser = ''
+    })
+
+    // pobieranie informacji o najlepszych zajerestrowanych użytkownikach
+    // gets information about the best registered users
+     if(this.IDuser === ''){
+      console.log('cannot find id user', this.IDuser)
+     }
+    else{
+      await axios
+      .get(`${this.endPoint}/${this.IDuser}`)
+      .then((response) => {
+          this.infoUser = response.data
+          console.log('Info about user:  ', this.infoUser)
+      })
+      .catch((err) => console.log(err))
+    }
+  },
+  async mounted(){
+    await this.$refs.focusInputWrite.focus();
+  },
+
   methods: {
     // definiowanie funkcji ktora ma za zadanie wysyłanie do bazy danych najlepszych wynikow jakie uzyskał użytkownik
     // defining the function that sends the best results obtained to the user to the database
@@ -840,7 +910,7 @@ export default {
       else{
         if(this.timeSpentPlus === 15){
           if(this.wordsPerMinuteEnd > this.infoUser.bestWPM15){
-            await axios.put(`https://api-fast--typing.herokuapp.com/dashboard/${this.IDuser}` , {
+            await axios.put(`${this.endPoint}/dashboard/${this.IDuser}` , {
               bestWPM15: this.wordsPerMinuteEnd,
               accuracy15: this.accuracyEnd,
               bestWPM60: this.infoUser.bestWPM60,
@@ -852,7 +922,7 @@ export default {
         }
         if(this.timeSpentPlus === 60){
           if(this.wordsPerMinuteEnd > this.infoUser.bestWPM60){
-            await axios.put(`https://api-fast--typing.herokuapp.com/dashboard/${this.IDuser}` , {
+            await axios.put(`${this.endPoint}/dashboard/${this.IDuser}` , {
             bestWPM15: this.infoUser.bestWPM15,
             accuracy15: this.infoUser.accuracy15,
             bestWPM60: this.wordsPerMinuteEnd,
@@ -876,11 +946,11 @@ export default {
         }
       }
       else {
-        this.excessLetters = ''
+        this.excessLetters = []
       }
     },
 
-    checkLetterAndPushWords(){
+    async checkLetterAndPushWords(){
       // this.valueInputLength += 1
 
       if(this.wordsOnPage.length < 9){
@@ -931,9 +1001,9 @@ export default {
 
       for(let i = this.numberOfLetter + 1; i < this.wordsOnPage[0].letters.length; i++){
         if(this.numberOfLetter == 0){
-          this.wordsOnPage[0].letters[0].correctness = {color: '#c5c5c5'};
+          this.wordsOnPage[0].letters[0].correctness = {color: this.colorStrongSub};
         }
-        this.wordsOnPage[0].letters[i].correctness = {color: '#c5c5c5'};
+        this.wordsOnPage[0].letters[i].correctness = {color: this.colorStrongSub};
       }
 
       if(this.valueInput[this.numberOfLetter] == this.letterOfValue){
@@ -989,10 +1059,10 @@ export default {
 
 
       //loading words
-      for(let i=0;i<9;i++){
+      this.wordsOnPage.forEach(item =>{
         const x = Math.floor(Math.random()*this.numberWords);
-        this.wordsOnPage[i].word =  this.words[x].word;
-      }
+        item.word =  this.words[x].word;
+      })
 
       this.checkLetterAndPushWords()
 
@@ -1028,7 +1098,7 @@ export default {
         'opacity': '0'
       };
 
-     this.opacityElements = {
+      this.opacityElements = {
         'transition': '.2s opacity',
         'opacity': '.5'
       },
@@ -1082,15 +1152,16 @@ export default {
     },
 
     opacityTimeSpent(){
+      //tutaj chcialem sprobowac zrobic classami zamiast style / v-if / v-show
       this.opacityColorTimeSpent = !this.opacityColorTimeSpent;
       this.normalColorTimeSpent = !this.normalColorTimeSpent;
     },
 
     // po kliknieciu na element input dostaje focus
     // after click the element getting focus
-    focusInputOnClick(){
-      setTimeout(() => this.focusInput = false, 0);
-      this.$refs.focusInputWrite.focus();
+    async focusInputOnClick(){
+      await this.$refs.focusInputWrite.focus();
+      this.focusInput = false
     },
 
     // nie wyswietla komuniktu, że input nie ma focus a
@@ -1131,7 +1202,7 @@ export default {
       this.layerSett = false
       this.showMain = !this.showMain;
       await axios
-      .get('https://api-fast--typing.herokuapp.com/users/topPlayers')
+      .get(`${this.endPoint}/users/topPlayers`)
       .then((response) =>{
         this.topUsers15 = response.data.topUsers15
         this.topUsers60 = response.data.topUsers60
@@ -1153,15 +1224,15 @@ export default {
     // zmienia czasu na ukończenie testu, czas jest podany przez użytkownika
     // changes the time to complete the test, the time is given by the user
     changeTimeSpentOptional(){
-      if(this.value < 5) {
-        this.value = 5;
+      if(this.valueTimeSpentOptional < 5) {
+        this.valueTimeSpentOptional = 5;
       }
 
-      this.value = parseInt(this.value)
-      Math.floor(this.value)
+      this.valueTimeSpentOptional = parseInt(this.valueTimeSpentOptional)
+      Math.floor(this.valueTimeSpentOptional)
 
-      this.timeSpent = this.value;
-      this.timeToTypeStorage = this.value;
+      this.timeSpent = this.valueTimeSpentOptional;
+      this.timeToTypeStorage = this.valueTimeSpentOptional;
 
       this.alertSuccess = true
       setTimeout(() => this.alertSuccess = false, 2000)
@@ -1219,7 +1290,7 @@ export default {
     // changes the language that the user selects
     changeLanguage(language){
       this.languagesArray.forEach(item =>{
-        if(language == item.json) {
+        if(language === item.json) {
           this.languageOn = item.json
         }
       })
@@ -1232,7 +1303,7 @@ export default {
     // change the language (in this case the languages are letters from the alphabet), which the user selects
     changeLanguageAlphabet(alphabet){
       this.alphabetArray.forEach(item=>{
-        if(alphabet == item.json){
+        if(alphabet === item.json){
           this.languageOn = item.json
         }
       })
@@ -1247,7 +1318,7 @@ export default {
       this.alertSuccess = false
     },
 
-    changeLayout(layout){
+    changeKeyboardLayout(layout){
       this.keyboard = layout
     },
 
@@ -1261,7 +1332,13 @@ export default {
 
     // odświeżanie zmiennych
     // refreshing variables
-    reload(){
+    async reload(){
+      // musi byc setTimeout bo nie czyta DOMu
+      setTimeout(()=>{
+        this.$refs.focusInputWrite.focus();
+      },0)
+      this.focusInput = false;
+
       this.valueInput = '';
       this.timeSpent = 0;
       this.timeSpent = this.timeToTypeStorage;
@@ -1281,59 +1358,18 @@ export default {
       this.opacityStart.opacity = 1;
       this.useOnceAfterTimeZero = true
       this.marginLineBehindLetter.animationIterationCount = 10000;
-      this.excessLetters = ''
+      this.excessLetters = []
 
       this.wpmChartArray = [];
       this.wpmChartTimeArray = [];
 
       this.reloaded = true
 
-
       this.loadWords();
 
       clearInterval(this.timer)
       clearInterval(this.checkLetterInterval)
-
-      setTimeout(()=>{
-        this.focusInput = false;
-        this.$refs.focusInputWrite.focus();
-      },0)
     },
-  },
-  // funkje ktore wywołują się po załadowaniu stronu
-  // functions that are called when the page is loaded
-  async mounted() {
-    this.keyboard =  this.keyboardQWERTY
-    this.loadWords();
-    this.$refs.focusInputWrite.focus();
-
-    // pobiera informacji o użytkowniku
-    // gets user information user information
-    await axios
-    .get('https://api-fast--typing.herokuapp.com/dashboard.json')
-    .then((response) => {
-      this.IDuser = response.data.user._id;
-    })
-    .catch(() =>{
-      this.IDuser = ''
-    })
-
-    // pobieranie informacji o najlepszych zajerestrowanych użytkownikach
-    // gets information about the best registered users
-     if(this.IDuser === ''){
-      console.log('cannot find id user', this.IDuser)
-     }
-    else{
-      await axios
-      .get(`https://api-fast--typing.herokuapp.com/dashboard/${this.IDuser}`)
-      .then((response) => {
-          this.infoUser = response.data
-          console.log('Info about user:  ', this.infoUser)
-      })
-      .catch((err) => console.log(err))
-    }
-
-
   },
 }
 </script>
@@ -1345,7 +1381,6 @@ export default {
     box-sizing: border-box;
 
 }
-
 
 body{
     background: $bg-main;
@@ -1413,8 +1448,6 @@ main{
       flex-direction: row;
       margin-left: .8rem;
     }
-
-
   }
 
   .inputWrite{
@@ -1435,6 +1468,48 @@ main{
   width: 100%;
   margin-top: 30vh;
 }
+
+.settings-blur{
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 12;
+  background-color: transparent;
+  position: absolute;
+  background: transparent;
+  backdrop-filter: blur(4px);
+}
+
+.settings{
+    .setting-flex{
+      height: 90%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+
+      .grid-elements{
+          display: grid;
+          grid-template-columns: 40vw 40vw;
+          grid-row: auto auto;
+      }
+    }
+}
+
+.setting{
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 11;
+  background-color: $bg-main;
+  position: absolute;
+}
+
+
+
+
 
 
 

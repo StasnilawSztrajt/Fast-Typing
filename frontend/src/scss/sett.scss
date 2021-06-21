@@ -1,0 +1,85 @@
+@import './variables.scss';
+
+.settings{
+    padding-bottom: 8vh;
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+    .inputOptionalTime{
+        background-color: transparent;
+        outline: none;
+        border: none;
+        border-bottom: 2px solid #5e5c5cb9;
+        color: $zaje-color;
+        margin-top: 3vh;
+        font-size: 1.2rem;
+        width: 60%;
+    }
+    .approveBtnOptionalTime{
+        display: inline-block;
+        border: 2px solid #5e5c5cb9;
+        cursor: pointer;
+        width: 5vw;
+        height: 3vh;
+        text-align: center;
+        margin-left: 1%;
+        transition: .3s background-color;
+
+        &:hover{
+            background-color: #5e5c5cb9;
+        }
+    }
+
+
+    &:nth-child(1){
+        border-right: 1px solid #5e5c5cb9;
+    }
+
+    &:nth-child(3){
+        border-right: 1px solid #5e5c5cb9;
+        border-top: 1px solid #5e5c5cb9;
+        border-bottom: 1px solid #5e5c5cb9;
+    }
+    &:nth-child(4){
+        border-top: 1px solid #5e5c5cb9;
+        border-bottom: 1px solid #5e5c5cb9;
+    }
+    &:nth-child(5){
+        border-right: 1px solid #5e5c5cb9;
+    }
+
+
+    h1{
+        color: $color-strong;
+    }
+
+    .button{
+        font-size: 1.4rem;
+        padding: 5px;
+        transition: all .2s;
+        cursor: pointer;
+        color: $color-strong-sub;
+
+
+        &:hover{
+            color: $color-strong;
+        }
+    }
+
+    .button-layout{
+        background: transparent;
+        color: $color-sub;
+        border: none;
+        margin-left: 4vh;
+        transition: .3s opacity;
+        font-size: 1rem;
+        cursor: pointer;
+
+        &:hover{
+            opacity: .5;
+        }
+    }
+
+  }

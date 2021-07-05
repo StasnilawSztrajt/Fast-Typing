@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <div class="navElements" v-show="!layerSett || !layerTopUsers">
+        <div class="navElements" v-show="!isLayerSett || !isLayerTopUsers">
         <a href="/"><span>FastTyping</span></a>
         <i class="fas fa-cog" @click="showLayerSett"></i>
         <a href="/visit"><i class="fas fa-question"></i></a>
@@ -8,7 +8,7 @@
         <a href="/faq"><i class="fas fa-headset"></i></a>
         <a href="https://api-fast--typing.herokuapp.com/users/login">
             <i class="fas fa-sign-in-alt"></i>
-            <span class="username">{{ infoUser.name }}</span>
+            <span class="username">{{ userInfo.name }}</span>
         </a>
 
         </div>
@@ -19,9 +19,9 @@
 export default {
     name: 'Menu',
     props: {
-        layerSett:     Boolean,
-        layerTopUsers: Boolean,
-        infoUser:      Object,
+        isLayerSett:     Boolean,
+        isLayerTopUsers: Boolean,
+        userInfo:      Object,
     },
     methods: {
         showLayerSett(){

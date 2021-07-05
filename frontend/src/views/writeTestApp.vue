@@ -2,23 +2,23 @@
   <div id="app" >
     <!-- Pobieranie elementow z compenent i wyswietlanie ich przez <NazwaComponentu /> -->
     <!-- Getting items from a component and displaying them by <NameCompenent /> -->
-    <div class="menu" :style="showBody">
+    <div class="menu" :style="styleBody">
       <Menu
-        :infoUser="infoUser"
-        :layerTopUsers="layerTopUsers"
-        :layerSett="layerSett"
+        :userInfo="userInfo"
+        :isLayerTopUsers="isLayerTopUsers"
+        :isLayerSett="isLayerSett"
         @show-layer-sett="showLayerSett"
         @show-layer-top-users="showLayerTopUsers"
       />
       <div class="settings">
-        <div class="settings-blur" v-show="alphabetTip"></div>
+        <div class="settings-blur" v-show="isAlphabetTip"></div>
         <AlphabetTip
-          :alphabetTip="alphabetTip"
+          :isAlphabetTip="isAlphabetTip"
           @show-alphabet-tip="showAlphabetTip"
         />
-        <div class="setting" v-show="layerSett">
+        <div class="setting" v-show="isLayerSett">
           <SuccessAlert
-            :alertSuccess="alertSuccess"
+            :isAlertSuccess="isAlertSuccess"
             @close-alert="closeAlert"
           />
           <CrossToCloseSettings
@@ -46,11 +46,11 @@
                 @change-type-of-writing2="changeTypeOfWriting2"
               />
               <LiveScoreSettings
-                :showScore="showScore"
+                :isShowScore="isShowScore"
                 @show-live-score="showLiveScore"
               />
               <ScreenKeyboardSettings
-                :showKeyboard="showKeyboard"
+                :isShowKeyboard="isShowKeyboard"
                 :keyboardQWERTY="keyboardQWERTY"
                 :keyboardDVORAK="keyboardDVORAK"
                 :keyboardCOLEMAK="keyboardCOLEMAK"
@@ -66,28 +66,28 @@
       <TopUsers
         :topUsers15="topUsers15"
         :topUsers60="topUsers60"
-        :layerTopUsers="layerTopUsers"
+        :isLayerTopUsers="isLayerTopUsers"
         @show-layer-top-users="showLayerTopUsers"
       />
     </div>
     <ScreenKeyboard
       :keyboard="keyboard"
       :style="opacityStart"
-      v-show="showKeyboardBool"
+      v-show="isShowKeyboardBool"
     />
-    <main v-show="showMain">
+    <main v-show="isShowMain">
       <EndScore
-        v-if="endTest"
+        v-if="isEndTest"
         :wordsPerMinute="wordsPerMinute"
         :wrongLetters="wrongLetters"
         :goodLetters="goodLetters"
         :accuracy="accuracy"
-        :infoUser="infoUser"
+        :userInfo="userInfo"
         :timeSpentPlus="timeSpentPlus"
         :IDuser="IDuser"
         :wpmChartTimeArray="wpmChartTimeArray"
         :wpmChartArray="wpmChartArray"
-        :endTest="endTest"
+        :isEndTest="isEndTest"
         :timeSpent="timeSpent"
         />
       <AlertsFocus
@@ -107,7 +107,7 @@
             :key="letter.id"
           />
 
-          <ExcessLetters 
+          <ExcessLetters
             :excessLetters="excessLetters"
           />
         </div>
@@ -132,7 +132,8 @@
           @blur="unFocusInput"
           class="inputWrite"
           ref="focusInputWrite"
-          :disabled="disabled">
+          :disabled="disabled"
+        >
 
         <div class="helper-elements" >
           <TimeSpentButton
@@ -154,8 +155,8 @@
         :wrongLetters="wrongLetters"
         :goodLetters="goodLetters"
         :accuracy="accuracy"
-        :showScore="showScore"
-        :showScoreBool="showScoreBool"
+        :isShowScore="isShowScore"
+        :isShowScoreBool="isShowScoreBool"
         :style="opacityStart"
       />
 
@@ -280,7 +281,7 @@ export default {
       topUsers60: {},
       IDuser: '',
       _id: '',
-      infoUser: {},
+      userInfo: {},
       endPoint: 'https://api-fast--typing.herokuapp.com',
 
       // Tablica , w której znajdują sie nazwy jezykow oraz ich plik .json
@@ -464,16 +465,16 @@ export default {
       // variables for : v-show / v-if / :class
       normalColorTimeSpent: true,
       opacityColorTimeSpent: false,
-      layerSett: false,
-      layerTopUsers: false,
-      stopTime: false,
+      isLayerSett: false,
+      isLayerTopUsers: false,
+      isStopTime: false,
       natural: true,
-      endTest: false,
-      showMain: true,
-      alertSuccess: false,
-      alphabetTip: false,
-      keyboardTip: false,
-      showBody: {
+      isEndTest: false,
+      isShowMain: true,
+      isAlertSuccess: false,
+      isAlphabetTip: false,
+      isKeyboardTip: false,
+      styleBody: {
         'transition': '.2s opacity',
         'opacity': '1'
       },
@@ -485,13 +486,13 @@ export default {
 
       // zmienne wyników na żywo
       // live score variables
-      showScore: 'OFF',
-      showScoreBool: false,
+      isShowScore: 'OFF',
+      isShowScoreBool: false,
 
       // zmienne klawiatury ekranowej
       // variables screen keyboard
-      showKeyboard: 'OFF',
-      showKeyboardBool: false,
+      isShowKeyboard: 'OFF',
+      isShowKeyboardBool: false,
 
       // zmienne powiązane ze słowami na minutę
       // variables bound to words per minute
@@ -499,8 +500,8 @@ export default {
       wordsPerMinuteEnd: 0,
       wrongLetters: 0,
       goodLetters: 0,
-      accuracy: 0,
-      accuracyEnd: 0,
+      accuracy: '',
+      accuracyEnd: '',
       wpmChartArray: [],
       wpmChartTimeArray: [],
 
@@ -517,6 +518,11 @@ export default {
       // zmienne ułady klawiatur
       // variables keyboard layouts
 
+
+      //generalnie to powinienem do json dac, ale juz mi sie nie chce zmieniac
+      //
+      //
+      //
       keyboardQWERTY: [
           ['qwerty'],
           [
@@ -890,8 +896,7 @@ export default {
       await axios
       .get(`${this.endPoint}/${this.IDuser}`)
       .then((response) => {
-          this.infoUser = response.data
-          console.log('Info about user:  ', this.infoUser)
+        this.userInfo = response.data
       })
       .catch((err) => console.log(err))
     }
@@ -909,22 +914,22 @@ export default {
       }
       else{
         if(this.timeSpentPlus === 15){
-          if(this.wordsPerMinuteEnd > this.infoUser.bestWPM15){
+          if(this.wordsPerMinuteEnd > this.userInfo.bestWPM15){
             await axios.put(`${this.endPoint}/dashboard/${this.IDuser}` , {
               bestWPM15: this.wordsPerMinuteEnd,
               accuracy15: this.accuracyEnd,
-              bestWPM60: this.infoUser.bestWPM60,
-              accuracy60: this.infoUser.accuracy60,
+              bestWPM60: this.userInfo.bestWPM60,
+              accuracy60: this.userInfo.accuracy60,
             })
             .then((response) => console.log('Stats have got edit: ', response))
             .catch((err) => console.log(err))
           }
         }
         if(this.timeSpentPlus === 60){
-          if(this.wordsPerMinuteEnd > this.infoUser.bestWPM60){
+          if(this.wordsPerMinuteEnd > this.userInfo.bestWPM60){
             await axios.put(`${this.endPoint}/dashboard/${this.IDuser}` , {
-            bestWPM15: this.infoUser.bestWPM15,
-            accuracy15: this.infoUser.accuracy15,
+            bestWPM15: this.userInfo.bestWPM15,
+            accuracy15: this.userInfo.accuracy15,
             bestWPM60: this.wordsPerMinuteEnd,
             accuracy60: this.accuracyEnd
           })
@@ -952,7 +957,6 @@ export default {
 
     async checkLetterAndPushWords(){
       // this.valueInputLength += 1
-
       if(this.wordsOnPage.length < 9){
         const x = Math.floor(Math.random()*50);
         this.wordsOnPage.push({word: this.words[x].word, id: 9, letters: []});
@@ -974,7 +978,6 @@ export default {
       this.wordsOnPage.forEach((item,index) => {
         item.id = index + 1
       })
-
 
       // zmienianie marginesu lini ,ktora wskazuje gdzie uzytkownik aktualnie pisze
       // changing the line margin that indicates where the user is currently typing
@@ -1008,29 +1011,26 @@ export default {
 
       if(this.valueInput[this.numberOfLetter] == this.letterOfValue){
         this.wordsOnPage[0].letters[this.numberOfLetter].correctness = {color: 'green'};
-        // this.numberOfLetter = this.valueInputLength;
         this.numberOfLetter = this.valueInput.length - 1;
       }
-      // else if(this.valueInputLength <= 0) this.correctness = null;
       else if(this.valueInput.length <= 0){
         this.correctness = null;
       }
       else{
         this.wordsOnPage[0].letters[this.numberOfLetter].correctness = {color: 'red'};
-        // this.numberOfLetter = this.valueInputLength;
         this.numberOfLetter = this.valueInput.length - 1;
       }
-
       // Podczas gdy czas na pisanie bedzie rowny 0 wykona sie wyswietlenie wynikow jakie osiagnał uzytkownik ,
       // w przeciwnym wypadku uzywa sie funkcja addExcessLetters i oblicza sie words per minute
       // sending data and displaying or calculating wpm and calling the addExcessLetters function
       if(this.timeSpent == 0  ){
-        this.endTest = true;
+        this.isEndTest = true;
         this.opacityStart.opacity = 0;
         this.disabled = true;
         this.wordsPerMinuteEnd = this.wordsPerMinute
         this.accuracyEnd = this.accuracy
-        clearInterval(this.checkLetterInterval)
+        this.checkLetterInterval = null
+        // clearInterval(this.checkLetterInterval)
 
         if(this.useOnceAfterTimeZero) {
           this.sendBestUserStats()
@@ -1044,7 +1044,7 @@ export default {
     },
 
     loadWords(){
-      this.showBody = {
+      this.styleBody = {
         'transition': '.2s opacity',
         'opacity' : '1'
       };
@@ -1075,12 +1075,12 @@ export default {
     // function for use in timer
     timerFunction(){
       if(this.timeSpent == 0){
-        this.stopTime = false;
+        this.isStopTime = false;
         this.AFKdetectorEnabled = false;
         this.reloaded = false
       }
       else{
-        if(this.stopTime){
+        if(this.isStopTime){
           this.timeSpent--;
           this.timeSpentPlus++;
           this.wpmChartArray.push(this.wordsPerMinute);
@@ -1093,7 +1093,7 @@ export default {
     // sprawdzanie poprawnosci słowa oraz podświetlanie klawiszy, ktore zostana naciśnięte (dla klawiatury ekranowej)
     // word validation and backlight of the keys to be pressed (for screen keyboard)
     checkWord(e){
-      this.showBody = {
+      this.styleBody = {
         'transition': '.2s opacity',
         'opacity': '0'
       };
@@ -1105,11 +1105,11 @@ export default {
 
       this.checkLetterInterval = setInterval(this.checkLetterAndPushWords,0)
 
-      if(this.stopTime === false) {
+      if(this.isStopTime === false) {
         this.timer = setInterval(this.timerFunction, 1000)
       }
 
-      this.stopTime = true;
+      this.isStopTime = true;
       this.marginLineBehindLetter.animationIterationCount = 0;
 
       // podświetlanie klawiszy, ktore zostana naciśnięte (dla klawiatury ekranowej)
@@ -1173,7 +1173,7 @@ export default {
     // wyswietla komuniktu, że input nie ma focus a
     // displays the message that input has no focus
     unFocusInput(){
-      this.showBody = {
+      this.styleBody = {
         'transition': '.2s opacity',
         'opacity': '1'
       };
@@ -1188,19 +1188,19 @@ export default {
     // zamyka lub wyswietla ustawienia
     // exits or displays settings
     showLayerSett(){
-      this.layerTopUsers = false;
-      this.layerSett = !this.layerSett;
-      this.showMain = !this.showMain;
-      this.alertSuccess = false;
+      this.isLayerTopUsers = false;
+      this.isLayerSett = !this.isLayerSett;
+      this.isShowMain = !this.isShowMain;
+      this.isAlertSuccess = false;
       this.reload();
     },
 
     // zamyka lub wyswietla najlepszych zajerestrowanych użytkowników
     // closes or displays top registered users
     async showLayerTopUsers(){
-      this.layerTopUsers = !this.layerTopUsers
-      this.layerSett = false
-      this.showMain = !this.showMain;
+      this.isLayerTopUsers = !this.isLayerTopUsers
+      this.isLayerSett = false
+      this.isShowMain = !this.isShowMain;
       await axios
       .get(`${this.endPoint}/users/topPlayers`)
       .then((response) =>{
@@ -1217,8 +1217,8 @@ export default {
       this.timeSpent = timeToType;
       this.timeToTypeStorage = timeToType;
 
-      this.alertSuccess = true
-      setTimeout(() => this.alertSuccess = false, 2000)
+      this.isAlertSuccess = true
+      setTimeout(() => this.isAlertSuccess = false, 2000)
     },
 
     // zmienia czasu na ukończenie testu, czas jest podany przez użytkownika
@@ -1234,8 +1234,8 @@ export default {
       this.timeSpent = this.valueTimeSpentOptional;
       this.timeToTypeStorage = this.valueTimeSpentOptional;
 
-      this.alertSuccess = true
-      setTimeout(() => this.alertSuccess = false, 2000)
+      this.isAlertSuccess = true
+      setTimeout(() => this.isAlertSuccess = false, 2000)
     },
 
     // zmiana typu pisania na 1 (chodzi o sposob poruszania sie lini wskazującej gdzie aktualnie sie pisze)
@@ -1243,8 +1243,8 @@ export default {
     changeTypeOfWriting1(){
       this.marginLineBehindLetter.type = false;
       this.marginWordAfterKeyup.type = true;
-      this.alertSuccess = true
-      setTimeout(() => this.alertSuccess = false, 2000)
+      this.isAlertSuccess = true
+      setTimeout(() => this.isAlertSuccess = false, 2000)
     },
 
     // zmiana typu pisania na 2 (chodzi o sposob poruszania sie lini wskazującej gdzie aktualnie sie pisze)
@@ -1252,38 +1252,38 @@ export default {
     changeTypeOfWriting2(){
       this.marginLineBehindLetter.type = true;
       this.marginWordAfterKeyup.type = false;
-      this.alertSuccess = true
-      setTimeout(() => this.alertSuccess = false, 2000)
+      this.isAlertSuccess = true
+      setTimeout(() => this.isAlertSuccess = false, 2000)
     },
 
     // ukrycie lub pokazanie wynikow na żywo
     // hide or show live results
     showLiveScore(){
-      if(this.showScore === 'OFF'){
-        this.showScore = 'ON'
-        this.showScoreBool = true
+      if(this.isShowScore === 'OFF'){
+        this.isShowScore = 'ON'
+        this.isShowScoreBool = true
       }
       else{
-        this.showScore = 'OFF'
-        this.showScoreBool = false
+        this.isShowScore = 'OFF'
+        this.isShowScoreBool = false
       }
-      this.alertSuccess = true
-      setTimeout(() => this.alertSuccess = false, 2000)
+      this.isAlertSuccess = true
+      setTimeout(() => this.isAlertSuccess = false, 2000)
     },
 
     // ukrycie lub pokazanie klawiatury ekranowej
     // hide or show screen keyboard
     showKeyboardFunction(){
-      if(this.showKeyboard === 'OFF'){
-        this.showKeyboard = 'ON'
-        this.showKeyboardBool = true
+      if(this.isShowKeyboard === 'OFF'){
+        this.isShowKeyboard = 'ON'
+        this.isShowKeyboardBool = true
       }
       else{
-        this.showKeyboard = 'OFF'
-        this.showKeyboardBool = false
+        this.isShowKeyboard = 'OFF'
+        this.isShowKeyboardBool = false
       }
-      this.alertSuccess = true
-      setTimeout(() => this.alertSuccess = false, 2000)
+      this.isAlertSuccess = true
+      setTimeout(() => this.isAlertSuccess = false, 2000)
     },
 
     // zmiana języka, który użytkownik wybierze
@@ -1295,8 +1295,8 @@ export default {
         }
       })
 
-      this.alertSuccess = true
-      setTimeout(() => this.alertSuccess = false, 2000)
+      this.isAlertSuccess = true
+      setTimeout(() => this.isAlertSuccess = false, 2000)
     },
 
     // zmiana języka (w tym przypadku językami są literki z alfabetu) , który użytkownik wybierze
@@ -1308,14 +1308,14 @@ export default {
         }
       })
 
-      this.alertSuccess = true
-      setTimeout(() => this.alertSuccess = false, 2000)
+      this.isAlertSuccess = true
+      setTimeout(() => this.isAlertSuccess = false, 2000)
     },
 
     // zamykanie alertu po wybraniu jednego z ustawień
     // close an alert after selecting one of the settings
     closeAlert(){
-      this.alertSuccess = false
+      this.isAlertSuccess = false
     },
 
     changeKeyboardLayout(layout){
@@ -1323,11 +1323,11 @@ export default {
     },
 
     showAlphabetTip(){
-      this.alphabetTip = !this.alphabetTip
+      this.isAlphabetTip = !this.isAlphabetTip
     },
 
     showKeyboardTip(){
-      this.keyboardTip = !this.keyboardTip
+      this.isKeyboardTip = !this.isKeyboardTip
     },
 
     // odświeżanie zmiennych
@@ -1346,14 +1346,14 @@ export default {
       this.wordsPerMinute = 0;
       this.wrongLetters = 0;
       this.goodLetters = 0;
-      this.accuracy = 0;
-      this.stopTime = false;
+      this.accuracy = '';
+      this.isStopTime = false;
       this.wordsOnPage[0].letters = [];
       this.correct = false;
       this.wrong = false;
       this.restUse = 0;
       this.marginLineBehindLetter.left = 0;
-      this.endTest = false;
+      this.isEndTest = false;
       this.disabled = false;
       this.opacityStart.opacity = 1;
       this.useOnceAfterTimeZero = true

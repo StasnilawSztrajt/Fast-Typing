@@ -11,7 +11,7 @@
           {{ time }}s
         </div>
       </div>
-    <input type="number" placeholder="Here you can enter your own time(in seconds)" max="10000" class="inputOptionalTime">
+    <input type="number" placeholder="Here you can enter your own time(in seconds)" max="10000" class="inputOptionalTime" value="valueTimeSpentOptional">
     <div class="approveBtnOptionalTime" @click="changeTimeSpentOptional">confirm</div>
   </div>
 </template>
@@ -21,7 +21,7 @@ export default {
   name: 'TimeSettings',
   props: {
     timeToChangeArray: Array,
-    value: String
+    valueTimeSpentOptional: String
   },
   methods: {
     changeTimeSpent(time){

@@ -1,5 +1,5 @@
 <template>
-    <div class="alphabetTip" v-show="alphabetTip">
+    <div class="alphabetTip" v-show="isAlphabetTip">
         <div class="cross" @click="showAlphabetTip"></div>
         <div class="text">
             If you are starting to learn to type quickly then start learning the middle of the keyboard as these keys are the most used
@@ -29,7 +29,7 @@
 export default {
     name: 'AlphabetTip',
     props: {
-        alphabetTip:       Boolean,
+        isAlphabetTip:       Boolean,
     },
     methods: {
         showAlphabetTip(){

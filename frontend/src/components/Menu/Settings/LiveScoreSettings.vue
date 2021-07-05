@@ -1,7 +1,7 @@
 <template>
   <div class="live-scoreS settings">
     <h1 class="score-h1">Live score</h1>
-    <div class="button" @click="showLiveScore">{{ showScore }}</div>
+    <div class="button" @click="showLiveScore">{{ isShowScore }}</div>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 export default {
   name: 'LiveScoreSettings',
   props: {
-    showScore: String,
+    isShowScore: String,
   },
   methods: {
     showLiveScore(){

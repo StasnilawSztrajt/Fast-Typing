@@ -8,7 +8,9 @@
 //
 export default {
     name: 'FirstWord',
-    props: ['letter','correct','wrong','natural','wordsOnPage']
+    props: {
+        letter: Object
+    },
 }
 </script>
 

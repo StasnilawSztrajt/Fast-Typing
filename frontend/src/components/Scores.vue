@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="scores" v-show="showScoreBool">
+        <div class="scores" v-show="isShowScoreBool">
             words per minute: <span class="wpm"> {{ wordsPerMinute }}WPM</span>
             accuracy: <span class="accuracy"> {{ accuracy }}%</span>
         </div>
@@ -11,7 +11,11 @@
 
 export default {
     name: 'Scores',
-    props: ['wordsPerMinute','accuracy','showScoreBool'],
+    props:{
+        wordsPerMinute: String,
+        accuracy: String,
+        isShowScoreBool: Boolean
+    },
 }
 </script>
 <style lang="scss">

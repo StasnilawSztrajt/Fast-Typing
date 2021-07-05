@@ -3,7 +3,7 @@
         <EndScoreChartLine
             :wpmChartTimeArray="wpmChartTimeArray"
             :wpmChartArray="wpmChartArray"
-            :endTest="endTest"
+            :isEndTest="isEndTest"
             :timeSpent="timeSpent"
             class="chartLine"
         />
@@ -57,21 +57,20 @@ export default {
     components: {
         EndScoreChartLine
     },
-    props: [
-        'wordsPerMinute',
-        'wrongLetters',
-        'goodLetters',
-        'accuracy',
-        'visableLiveScore',
-        'infoUser',
-        'timeSpentPlus',
-        'IDuser',
-        'wpmChartTimeArray',
-        'wpmChartArray',
-        'endTest',
-        'timeSpent'
-        ],
-
+    props: {
+        wordsPerMinute: String,
+        wrongLetters: Number,
+        goodLetters: Number,
+        accuracy: String,
+        visableLiveScore: Boolean,
+        userInfo: Object,
+        timeSpentPlus: Number,
+        IDuser: String,
+        wpmChartTimeArray: Array,
+        wpmChartArray: Array,
+        isEndTest: Boolean,
+        timeSpent: Number
+    },
 }
 </script>
 

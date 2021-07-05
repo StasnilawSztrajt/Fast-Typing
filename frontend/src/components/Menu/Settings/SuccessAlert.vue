@@ -1,5 +1,5 @@
 <template>
-    <div class="alertSuccess" v-show="alertSuccess">
+    <div class="alertSuccess" v-show="isAlertSuccess">
         Success
         <i class="fas fa-times sett cross" @click="closeAlert"></i>
     </div>
@@ -9,7 +9,7 @@
 export default {
     name: 'SuccessAlert',
     props: {
-        alertSuccess: Boolean
+        isAlertSuccess: Boolean
     },
     methods: {
         closeAlert(){

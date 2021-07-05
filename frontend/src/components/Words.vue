@@ -5,7 +5,9 @@
 
 export default {
     name: 'Words',
-    props: ['word']
+    props: {
+      word: Object
+    }
 }
 </script>
 <style lang="scss">

@@ -1,5 +1,5 @@
 <template>
-    <div class="topUsersLayer" v-show="layerTopUsers">
+    <div class="topUsersLayer" v-show="isLayerTopUsers">
         <div class="flexCross">
             <i class="fas fa-times sett cross" @click="showLayerTopUsers"></i>
         </div>
@@ -43,7 +43,7 @@ export default {
     props: {
         topUsers15: Object,
         topUsers60: Object,
-        layerTopUsers: Boolean
+        isLayerTopUsers: Boolean
     },
     methods: {
         showLayerTopUsers(){

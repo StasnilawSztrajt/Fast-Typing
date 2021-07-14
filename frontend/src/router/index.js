@@ -1,7 +1,10 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import writeTestApp from '../views/writeTestApp.vue'
-import visit from '../views/visit.vue'
+import Visit from '../views/Visit.vue'
 import FAQ from '../views/FAQ.vue'
+import Dashboard from '../views/Dashboard.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 
 const routes = [
     {
@@ -10,26 +13,30 @@ const routes = [
         component: writeTestApp
     },
     {
-        path: '/visit',
-        name: 'visit',
-        component: visit
+        path: '/Visit',
+        name: 'Visit',
+        component: Visit
     },
     {
         path: '/faq',
         name: 'FAQ',
         component: FAQ
     },
-    // {
-    //     path: '/api/users/login',
-    //     name: 'login',
-    //     component: Login
-    // },
-    // {
-    //     path: '/api/users/register',
-    //     name: 'register',
-    //     component: Register,
-        // beforeEnter: checkNotAuthenticated
-    // },
+    {
+        path: '/dashboard',
+        name: 'Dashboard',
+        component: Dashboard
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: Register,
+    },
 ]
 
 const router = createRouter({

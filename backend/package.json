@@ -1,34 +1,36 @@
 {
   "name": "backend",
-  "version": "1.0.0",
-  "main": "app.js",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Strapi application",
   "scripts": {
-    "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi"
   },
-  "author": "",
-  "license": "ISC",
+  "devDependencies": {},
   "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
-    "connect-flash": "^0.1.1",
-    "cors": "^2.8.5",
-    "ejs": "^3.1.6",
-    "ejs-lint": "^1.1.0",
-    "express": "^4.17.1",
-    "express-ejs-layouts": "^2.5.0",
-    "express-partials": "^0.3.0",
-    "express-session": "^1.17.1",
-    "http": "0.0.1-security",
-    "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.6.4",
-    "mongoose": "^5.12.2",
-    "passport": "^0.4.1",
-    "passport-local": "^1.0.0",
-    "path": "^0.12.7",
-    "sass": "^1.32.8",
-    "scss": "^0.2.4",
-    "server-static": "^2.0.5",
-    "socket.io": "^2.3.0"
-  }
+    "strapi": "3.6.5",
+    "strapi-admin": "3.6.5",
+    "strapi-utils": "3.6.5",
+    "strapi-plugin-content-type-builder": "3.6.5",
+    "strapi-plugin-content-manager": "3.6.5",
+    "strapi-plugin-users-permissions": "3.6.5",
+    "strapi-plugin-email": "3.6.5",
+    "strapi-plugin-upload": "3.6.5",
+    "strapi-plugin-i18n": "3.6.5",
+    "strapi-connector-mongoose": "3.6.5"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "strapi": {
+    "uuid": "7833ab77-46cd-4bc8-9bb0-70c4d0222203"
+  },
+  "engines": {
+    "node": ">=10.16.0 <=14.x.x",
+    "npm": "^6.0.0"
+  },
+  "license": "MIT"
 }

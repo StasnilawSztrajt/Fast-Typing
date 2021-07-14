@@ -4,7 +4,7 @@
       <a href="/"><span>FastTyping</span></a>
       <a href="/visit/"><i class="fas fa-question"></i></a>
       <a href="/faq/"><i class="fas fa-headset"></i></a>
-      <a href="https://api-fast--typing.herokuapp.com/users/login"><i class="fas fa-sign-in-alt"></i></a>
+      <a href="http://localhost:8080/login/"><i class="fas fa-sign-in-alt"></i></a>
     </nav>
     <main>
       <div class="numberSlide">{{ numberSlide + 1}}/{{ slides.length }}</div>

@@ -85,16 +85,16 @@ export default {
             let doc = document.getElementById(keyboard);
             if(this.pickedUp){
                 if(doc.offsetTop < 0){
-                    doc.style.top = 0 + 'px';
+                    return doc.style.top = 1 + 'px';
                 }
                 else if(doc.offsetLeft < 0){
-                    doc.style.left = 0 + 'px';
+                    return doc.style.left = 0 + 'px';
                 }
                 else if(doc.offsetTop + this.heightKeyboard > window.innerHeight){
-                    doc.style.top = (window.innerHeight - this.heightKeyboard) + 'px';
+                    return doc.style.top = (window.innerHeight - this.heightKeyboard) + 'px';
                 }
                 else if(doc.offsetLeft + this.widthKeyboard > window.innerWidth){
-                    doc.style.left = (window.innerWidth - this.widthKeyboard) + 'px';
+                    return doc.style.left = (window.innerWidth - this.widthKeyboard) + 'px';
                 }
                 else{
                     doc.style.left = event.clientX - 250 + "px";

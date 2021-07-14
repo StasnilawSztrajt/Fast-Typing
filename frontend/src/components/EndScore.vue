@@ -11,22 +11,22 @@
             <div class="element" v-if="IDuser != '' && timeSpentPlus === 15">
                 Record words per minute:
                 <div class="element-info">
-                    {{ infoUser.bestWPM15 }}wpm
+                    {{ userInfo.bestWPM15 }}wpm
                 </div>
             </div>
             <div class="element" v-if="IDuser != ''  && timeSpentPlus === 15">
                 Record accuracy:
                 <div class="element-info">
-                    {{ infoUser.accuracy15 }}
+                    {{ userInfo.accuracy15 }}
                 </div>
             </div>
             <div class="element" v-if="IDuser != '' && timeSpentPlus === 60">
                 Record words per minute:
-                <div class="element-info">{{ infoUser.bestWPM60 }}wpm</div>
+                <div class="element-info">{{ userInfo.bestWPM60 }}wpm</div>
             </div>
             <div class="element" v-if="IDuser != '' && timeSpentPlus === 60">
                 Record accuracy:
-                <div class="element-info">{{ infoUser.accuracy60 }}</div>
+                <div class="element-info">{{ userInfo.accuracy60 }}</div>
             </div>
 
             <div class="element">

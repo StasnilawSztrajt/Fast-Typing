@@ -108,7 +108,9 @@
           />
 
           <ExcessLetters
-            :excessLetters="excessLetters"
+            v-for="(letter, index) in excessLetters"
+            :key="index"
+            :letter="letter"
           />
         </div>
 
@@ -125,13 +127,13 @@
         <input
           type="text"
           maxlength="20"
-          v-model="valueInput"
+          v-model="valueInputToWrite"
           @input="AFKdetector"
           @keydown="checkWord"
           @focus="whileFocusInput"
           @blur="unFocusInput"
-          class="inputWrite"
-          ref="focusInputWrite"
+          class="inputToWrite"
+          ref="focusInputToWrite"
           :disabled="disabled"
         >
 
@@ -188,6 +190,7 @@ import TopUsers from '../components/Menu/TopUsers';
 
 import ScreenKeyboard from '../components/Menu/Settings/ScreenKeyboard';
 import AlertsFocus from '../components/AlertsFocus';
+
 
 import FirstWord from '../components/FirstWord';
 import ExcessLetters from '../components/ExcessLetters';
@@ -282,7 +285,8 @@ export default {
       IDuser: '',
       _id: '',
       userInfo: {},
-      endPoint: 'https://api-fast--typing.herokuapp.com',
+      API_URL: 'http://localhost:1337',
+      userCookie: this.$cookies.get('user'),
 
       // Tablica , w której znajdują sie nazwy jezykow oraz ich plik .json
       // Array include the names of the languages and their .json file
@@ -450,7 +454,7 @@ export default {
 
       // zmienne z głownego input
       // variables main input
-      valueInput: '',
+      valueInputToWrite: '',
       valueInputLength: 0,
       timeSpent: 60,
       timeSpentPlus: 0,
@@ -873,36 +877,26 @@ export default {
   // funkje ktore wywołują się po załadowaniu stronu
   // functions that are called when the page is loaded
   async created() {
-    this.keyboard =  this.keyboardQWERTY
+    this.keyboard =  this.keyboardQWERTY;
     this.loadWords();
 
-    // pobiera informacji o użytkowniku
-    // gets user information user information
-    await axios
-    .get(`${this.endPoint}/dashboard.json`)
-    .then((response) => {
-      this.IDuser = response.data.user._id;
-    })
-    .catch(() =>{
-      this.IDuser = ''
-    })
+    this.IDuser = this.userCookie.id ? this.userCookie.id : '';
 
     // pobieranie informacji o najlepszych zajerestrowanych użytkownikach
     // gets information about the best registered users
-     if(this.IDuser === ''){
-      console.log('cannot find id user', this.IDuser)
-     }
+    if(this.IDuser === ''){
+      console.log('cannot find id user')
+    }
     else{
-      await axios
-      .get(`${this.endPoint}/${this.IDuser}`)
-      .then((response) => {
-        this.userInfo = response.data
+      await axios.get(`${this.API_URL}/users/${this.userCookie.id}`)
+      .then((res) => {
+        this.userInfo = res.data
       })
       .catch((err) => console.log(err))
     }
   },
   async mounted(){
-    await this.$refs.focusInputWrite.focus();
+    await this.$refs.focusInputToWrite.focus();
   },
 
   methods: {
@@ -915,7 +909,7 @@ export default {
       else{
         if(this.timeSpentPlus === 15){
           if(this.wordsPerMinuteEnd > this.userInfo.bestWPM15){
-            await axios.put(`${this.endPoint}/dashboard/${this.IDuser}` , {
+            await axios.put(`${this.API_URL}/users/${this.IDuser}` , {
               bestWPM15: this.wordsPerMinuteEnd,
               accuracy15: this.accuracyEnd,
               bestWPM60: this.userInfo.bestWPM60,
@@ -927,7 +921,7 @@ export default {
         }
         if(this.timeSpentPlus === 60){
           if(this.wordsPerMinuteEnd > this.userInfo.bestWPM60){
-            await axios.put(`${this.endPoint}/dashboard/${this.IDuser}` , {
+            await axios.put(`${this.API_URL}/users/${this.IDuser}` , {
             bestWPM15: this.userInfo.bestWPM15,
             accuracy15: this.userInfo.accuracy15,
             bestWPM60: this.wordsPerMinuteEnd,
@@ -943,10 +937,10 @@ export default {
     //definiowanie funkcji ktora ma za zadanie dodawac nadmiar liter , ktore wprowadził użytkownik
     //defining a function that is supposed to add excess letters entered by the user
     addExcessLetters(){
-      if(this.valueInput.length  > this.wordsOnPage[0].word.length){
-        this.excessLetters = this.valueInput
+      if(this.valueInputToWrite.length  > this.wordsOnPage[0].word.length){
+        this.excessLetters = this.valueInputToWrite
         this.excessLetters = this.excessLetters.split('')
-        for(let i = 0; i<=this.wordsOnPage[0].word.length-1; i++){
+        for(let i = 0; i<this.wordsOnPage[0].word.length; i++){
           this.excessLetters.shift()
         }
       }
@@ -964,7 +958,7 @@ export default {
 
       // dodawaine do tablicy letters obiekt potrzebny do sparwdzania poprawnosci liter
       // adding to the letters array to the object needed to validate letters
-      if(this.wordsOnPage[0].letters.length == 0){
+      if(this.wordsOnPage[0].letters.length === 0){
         for(let i = 0; i < this.wordsOnPage[0].word.length; i++){
           this.wordsOnPage[0].letters.push({
             letter: this.wordsOnPage[0].word[i],
@@ -975,14 +969,14 @@ export default {
       }
       // dodawanie odpowiedniego id dla słów
       // adding the appropriate id for words
-      this.wordsOnPage.forEach((item,index) => {
-        item.id = index + 1
+      this.wordsOnPage.forEach((word,index) => {
+        word.id = index + 1
       })
 
       // zmienianie marginesu lini ,ktora wskazuje gdzie uzytkownik aktualnie pisze
       // changing the line margin that indicates where the user is currently typing
       for(let i=0; i<=20; i++){
-        switch(this.valueInput.length){
+        switch(this.valueInputToWrite.length){
           case i:
             if(this.marginLineBehindLetter.type){
               this.marginLineBehindLetter.left = `${i*0.9}rem`;
@@ -1009,16 +1003,16 @@ export default {
         this.wordsOnPage[0].letters[i].correctness = {color: this.colorStrongSub};
       }
 
-      if(this.valueInput[this.numberOfLetter] == this.letterOfValue){
+      if(this.valueInputToWrite[this.numberOfLetter] === this.letterOfValue){
         this.wordsOnPage[0].letters[this.numberOfLetter].correctness = {color: 'green'};
-        this.numberOfLetter = this.valueInput.length - 1;
+        this.numberOfLetter = this.valueInputToWrite.length - 1;
       }
-      else if(this.valueInput.length <= 0){
+      else if(this.valueInputToWrite.length <= 0){
         this.correctness = null;
       }
       else{
         this.wordsOnPage[0].letters[this.numberOfLetter].correctness = {color: 'red'};
-        this.numberOfLetter = this.valueInput.length - 1;
+        this.numberOfLetter = this.valueInputToWrite.length - 1;
       }
       // Podczas gdy czas na pisanie bedzie rowny 0 wykona sie wyswietlenie wynikow jakie osiagnał uzytkownik ,
       // w przeciwnym wypadku uzywa sie funkcja addExcessLetters i oblicza sie words per minute
@@ -1059,9 +1053,9 @@ export default {
 
 
       //loading words
-      this.wordsOnPage.forEach(item =>{
+      this.wordsOnPage.forEach(word =>{
         const x = Math.floor(Math.random()*this.numberWords);
-        item.word =  this.words[x].word;
+        word.word =  this.words[x].word;
       })
 
       this.checkLetterAndPushWords()
@@ -1130,11 +1124,11 @@ export default {
       if(e.keyCode === 32){
         e.preventDefault();
 
-        if(this.valueInput == this.wordsOnPage[0].word){
+        if(this.valueInputToWrite === this.wordsOnPage[0].word){
           this.goodLetters += this.wordsOnPage[0].word.length + 1;
           this.wordsOnPage.shift();
         }
-        else if(this.valueInput == '') {
+        else if(this.valueInputToWrite === '') {
           return
         }
         else{
@@ -1145,7 +1139,7 @@ export default {
 
         this.accuracy = (this.goodLetters/(this.goodLetters+this.wrongLetters)*100).toFixed(2);
 
-        this.valueInput = '';
+        this.valueInputToWrite = '';
         this.letterOfValue = '';
         this.numberOfLetter = 0;
       }
@@ -1160,7 +1154,7 @@ export default {
     // po kliknieciu na element input dostaje focus
     // after click the element getting focus
     async focusInputOnClick(){
-      await this.$refs.focusInputWrite.focus();
+      await this.$refs.focusInputToWrite.focus();
       this.focusInput = false
     },
 
@@ -1202,7 +1196,7 @@ export default {
       this.isLayerSett = false
       this.isShowMain = !this.isShowMain;
       await axios
-      .get(`${this.endPoint}/users/topPlayers`)
+      .get(`${this.API_URL}/users/topPlayers`)
       .then((response) =>{
         this.topUsers15 = response.data.topUsers15
         this.topUsers60 = response.data.topUsers60
@@ -1333,13 +1327,13 @@ export default {
     // odświeżanie zmiennych
     // refreshing variables
     async reload(){
-      // musi byc setTimeout bo nie czyta DOMu
-      setTimeout(()=>{
-        this.$refs.focusInputWrite.focus();
-      },0)
+      // musi byc setTimeout bo nie czyta DOMu a async/await nie dziala
+      // setTimeout(()=>{
+      await this.$refs.focusInputToWrite.focus();
+      // },0)
       this.focusInput = false;
 
-      this.valueInput = '';
+      this.valueInputToWrite = '';
       this.timeSpent = 0;
       this.timeSpent = this.timeToTypeStorage;
       this.timeSpentPlus = 0;
@@ -1450,7 +1444,7 @@ main{
     }
   }
 
-  .inputWrite{
+  .inputToWrite{
     opacity: 0;
     width: 0;
     height: 0;
@@ -1459,7 +1453,7 @@ main{
     font-size: 2rem;
     border: none;
   }
-  .inputWrite:focus{
+  .inputToWrite:focus{
     border: none;
   }
 }

@@ -6,9 +6,9 @@
         <a href="/visit"><i class="fas fa-question"></i></a>
         <i class="fas fa-tachometer-alt" @click="showLayerTopUsers"></i>
         <a href="/faq"><i class="fas fa-headset"></i></a>
-        <a href="https://api-fast--typing.herokuapp.com/users/login">
+        <a href="http://localhost:8080/login/">
             <i class="fas fa-sign-in-alt"></i>
-            <span class="username">{{ userInfo.name }}</span>
+            <span class="username">{{ userInfo.username }}</span>
         </a>
 
         </div>

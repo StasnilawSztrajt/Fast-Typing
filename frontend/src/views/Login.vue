@@ -41,6 +41,8 @@
 <script>
 import axios from 'axios'
 
+import API_URL from '../API_URL'
+
 export default {
   name: 'Dashboard',
   data(){
@@ -51,8 +53,6 @@ export default {
       ISjwt: this.$cookies.isKey('jwt'),
 
       loginError: false,
-
-      API_URL: 'http://localhost:1337',
 
       setTimeout: Function,
       setTimeoutTime: 4000
@@ -66,7 +66,7 @@ export default {
   methods: {
     async login(){
       console.log('siema')
-      await axios.post(`${this.API_URL}/auth/local`, {
+      await axios.post(`${API_URL}/auth/local`, {
         identifier: this.emailValue,
         password: this.passwordValue
       })

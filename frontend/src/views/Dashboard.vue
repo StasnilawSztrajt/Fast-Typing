@@ -1,11 +1,9 @@
 <template>
   <main>
-    <a href="/users/logout">
-      <button class="button">
-        <a href="/users/logout" class="router"><i class="fas fa-sign-out-alt"></i> Log out</a>
-      </button>
-    </a>
-    <a href="http://localhost:8080/" class="logo-href"><h1 class="logo">FastTyping</h1></a>
+    <button class="button" @click="logout">
+        <p class="router"><i class="fas fa-sign-out-alt"></i> Log out</p>
+    </button>
+    <router-link to="/" class="logo-href"><h1 class="logo">FastTyping</h1></router-link>
 
     <h2>Dashboard <span class="info-user">{{ user.username }}</span></h2>
     <div class="info">
@@ -26,6 +24,8 @@
 <script>
 import axios from 'axios'
 
+import API_URL from '../API_URL'
+
 export default {
   name: 'Dashboard',
   data(){
@@ -33,14 +33,19 @@ export default {
         jwt: this.$cookies.get('jwt'),
         userCookie: this.$cookies.get('user'),
         user: {},
-
-        API_URL: 'http://localhost:1337',
     }
   },
   created(){
-    axios.get(`${this.API_URL}/users/${this.userCookie.id}`)
+    axios.get(`${API_URL}/users/${this.userCookie.id}`)
     .then(res => this.user = res.data)
     .catch(err => console.log(err))
+  },
+  methods: {
+      logout(){
+        this.$cookies.remove('jwt')
+        this.$cookies.remove('user')
+        this.$router.push('/login')
+      }
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="forLearnS settings">
-        <h1>Learning to write <span class="tips" @click="isShowAlphabetTip"> <i class="fas fa-lightbulb"></i>  &nbsp;tip</span> </h1>
+        <h1>Learning to write </h1>
 
         <div class="forLearn">
             <div

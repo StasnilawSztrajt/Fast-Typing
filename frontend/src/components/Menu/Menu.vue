@@ -1,15 +1,15 @@
 <template>
     <nav>
         <div class="navElements" v-show="!isLayerSett || !isLayerTopUsers">
-        <a href="/"><span>FastTyping</span></a>
+        <router-link to="/"><span>FastTyping</span></router-link>
         <i class="fas fa-cog" @click="showLayerSett"></i>
-        <a href="/visit"><i class="fas fa-question"></i></a>
-        <i class="fas fa-tachometer-alt" @click="showLayerTopUsers"></i>
-        <a href="/faq"><i class="fas fa-headset"></i></a>
-        <a href="http://localhost:8080/login/">
+        <router-link to="/visit"><i class="fas fa-question"></i></router-link>
+        <router-link to="/topUsers"><i class="fas fa-tachometer-alt"></i></router-link>
+        <router-link to="/faq"><i class="fas fa-headset"></i></router-link>
+        <router-link to="/login">
             <i class="fas fa-sign-in-alt"></i>
             <span class="username">{{ userInfo.username }}</span>
-        </a>
+        </router-link>
 
         </div>
     </nav>

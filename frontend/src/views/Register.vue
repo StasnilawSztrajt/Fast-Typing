@@ -68,6 +68,9 @@
 </template>
 
 <script>
+import API_URL from '../API_URL'
+
+
 export default {
   name: 'Dashboard',
   data(){
@@ -81,8 +84,6 @@ export default {
       validationError: false,
 
       ISjwt: this.$cookies.isKey('jwt'),
-
-      API_URL: 'http://localhost:1337',
 
       setTimeout: null,
       setTimeoutTime: 4000,
@@ -158,7 +159,7 @@ export default {
         accuracy60: 0
       }
 
-      const registerResponse = await fetch(`${this.API_URL}/auth/local/register`, {
+      const registerResponse = await fetch(`${API_URL}/auth/local/register`, {
         method: "POST",
         headers: {
           'Accept': 'application/json',

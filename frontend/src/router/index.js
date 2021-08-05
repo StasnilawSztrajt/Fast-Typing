@@ -5,6 +5,7 @@ import FAQ from '../views/FAQ.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import TopUsers from '../views/TopUsers.vue'
 
 const routes = [
     {
@@ -36,6 +37,11 @@ const routes = [
         path: '/register',
         name: 'Register',
         component: Register,
+    },
+    {
+        path: '/topUsers',
+        name: 'TopUsers',
+        component: TopUsers,
     },
 ]
 

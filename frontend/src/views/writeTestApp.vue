@@ -5,10 +5,8 @@
     <div class="menu" :style="styleBody">
       <Menu
         :userInfo="userInfo"
-        :isLayerTopUsers="isLayerTopUsers"
         :isLayerSett="isLayerSett"
         @show-layer-sett="showLayerSett"
-        @show-layer-top-users="showLayerTopUsers"
       />
       <div class="settings">
         <div class="settings-blur" v-show="isAlphabetTip"></div>
@@ -63,12 +61,6 @@
           </div>
         </div>
       </div>
-      <TopUsers
-        :topUsers15="topUsers15"
-        :topUsers60="topUsers60"
-        :isLayerTopUsers="isLayerTopUsers"
-        @show-layer-top-users="showLayerTopUsers"
-      />
     </div>
     <ScreenKeyboard
       :keyboard="keyboard"
@@ -124,6 +116,7 @@
       </div>
 
       <div class="elements">
+        <!-- nie wrzucilem do componentu bo nie wiedzialem do konca w jaki sposob przekazac ref'a  -->
         <input
           type="text"
           maxlength="20"
@@ -186,8 +179,6 @@ import LiveScoreSettings from '../components/Menu/Settings/LiveScoreSettings';
 import ScreenKeyboardSettings from '../components/Menu/Settings/ScreenKeyboardSettings';
 
 
-import TopUsers from '../components/Menu/TopUsers';
-
 import ScreenKeyboard from '../components/Menu/Settings/ScreenKeyboard';
 import AlertsFocus from '../components/AlertsFocus';
 
@@ -202,6 +193,14 @@ import Scores from '../components/Scores';
 import TimeSpentButton from '../components/TimeSpentButton'
 import ReloadButton from '../components/ReloadButton'
 import Shortcut from '../components/Shortcut'
+
+// importowanie layoutow
+// importing layouts
+
+import keyboardQWERTY from '../keyboard-layouts/qwerty.json'
+import keyboardDVORAK from '../keyboard-layouts/dvorak.json'
+import keyboardCOLEMAK from '../keyboard-layouts/colemak.json'
+import keyboardWORKMAN from '../keyboard-layouts/workman.json'
 
 // importowanie Jezykow
 // importing languages
@@ -246,6 +245,7 @@ import Xx from '../languages/alphabet/x.json'
 import Yy from '../languages/alphabet/y.json'
 import Zz from '../languages/alphabet/z.json'
 
+import API_URL from '../API_URL'
 
 export default {
   name: 'writeTestApp',
@@ -262,7 +262,6 @@ export default {
     WritingSettings,
     LiveScoreSettings,
     ScreenKeyboardSettings,
-    TopUsers,
     ScreenKeyboard,
     AlertsFocus,
     FirstWord,
@@ -285,7 +284,6 @@ export default {
       IDuser: '',
       _id: '',
       userInfo: {},
-      API_URL: 'http://localhost:1337',
       userCookie: this.$cookies.get('user'),
 
       // Tablica , w której znajdują sie nazwy jezykow oraz ich plik .json
@@ -512,7 +510,7 @@ export default {
       // zmienna do ktorej zostanie przypisane setInterval()
       // The variable to which will be assigned setInterval()
       timer: 0,
-      checkLetterInterval: null,
+      // checkLetterInterval: null,
 
       // zmienne potrzebne do sprawdzenia poprawnosci liter
       // variables needed to validate letters
@@ -521,308 +519,10 @@ export default {
 
       // zmienne ułady klawiatur
       // variables keyboard layouts
-
-
-      //generalnie to powinienem do json dac, ale juz mi sie nie chce zmieniac
-      //
-      //
-      //
-      keyboardQWERTY: [
-          ['qwerty'],
-          [
-            {letter: 'Esc', code: 'Escape',active: {}},
-            {letter: '1 !', code: 'Digit1',active: {}},
-            {letter: '2 @', code: 'Digit2',active: {}},
-            {letter: '3 #', code: 'Digit3',active: {}},
-            {letter: '4 $', code: 'Digit4',active: {}},
-            {letter: '5 %', code: 'Digit5',active: {}},
-            {letter: '6 ^', code: 'Digit6',active: {}},
-            {letter: '7 &', code: 'Digit7',active: {}},
-            {letter: '8 *', code: 'Digit8',active: {}},
-            {letter: '9 (', code: 'Digit9',active: {}},
-            {letter: '0 )', code: 'Digit0',active: {}},
-            {letter: '- _', code: 'Minus',active: {}},
-            {letter: '= +', code: 'Equal',active: {}},
-            {letter: 'Backspace', code: 'Backspace',active: {}},
-          ],
-          [
-            {letter: 'Tab', code: 'Tab',active: {}},
-            {letter: 'Q', code: 'KeyQ',active: {}},
-            {letter: 'W', code: 'KeyW',active: {}},
-            {letter: 'E', code: 'KeyE',active: {}},
-            {letter: 'R', code: 'KeyR',active: {}},
-            {letter: 'T', code: 'KeyT',active: {}},
-            {letter: 'Y', code: 'KeyY',active: {}},
-            {letter: 'U', code: 'KeyU',active: {}},
-            {letter: 'I', code: 'KeyI',active: {}},
-            {letter: 'O', code: 'KeyO',active: {}},
-            {letter: 'P', code: 'KeyP',active: {}},
-            {letter: '[ {', code: 'BracketLeft',active: {}},
-            {letter: '] }', code: 'BracketRight',active: {}},
-            {letter: '\\ |', code: 'Backslash',active: {}},
-          ],
-          [
-            {letter: 'Caps', code: 'CapsLock',active: {}},
-            {letter: 'A', code: 'KeyA',active: {}},
-            {letter: 'S', code: 'KeyS',active: {}},
-            {letter: 'D', code: 'KeyD',active: {}},
-            {letter: 'F', code: 'KeyF',active: {}},
-            {letter: 'G', code: 'KeyG',active: {}},
-            {letter: 'H', code: 'KeyH',active: {}},
-            {letter: 'J', code: 'KeyJ',active: {}},
-            {letter: 'K', code: 'KeyK',active: {}},
-            {letter: 'L', code: 'KeyL',active: {}},
-            {letter: '; :', code: 'Semicolon',active: {}},
-            {letter: `' "`, code: 'Quote',active: {}},
-            {letter: 'Enter', code: 'Enter',active: {}},
-          ],
-          [
-            {letter: 'Shift', code: 'ShiftLeft',active: {}},
-            {letter: 'Z', code: 'KeyZ',active: {}},
-            {letter: 'X', code: 'KeyX',active: {}},
-            {letter: 'C', code: 'KeyC',active: {}},
-            {letter: 'V', code: 'KeyV',active: {}},
-            {letter: 'B', code: 'KeyB',active: {}},
-            {letter: 'N', code: 'KeyN',active: {}},
-            {letter: 'M', code: 'KeyM',active: {}},
-            {letter: ', <', code: 'Comma',active: {}},
-            {letter: '. >', code: 'Period',active: {}},
-            {letter: '/ ?', code: 'Slash',active: {}},
-            {letter: 'Shift', code: 'ShiftRight',active: {}},
-          ],
-          [
-            {letter: 'Ctrl', code: 'ControlLeft',active: {}},
-            {letter: 'win', code: 'MetaRight',active: {}},
-            {letter: 'Alt', code: 'AltRight',active: {}},
-            {letter: 'Space', code: 'Space',active: {}},
-            {letter: 'Alt',code: 'AltRight', active: {}},
-            {letter: 'win', code: 'MetaRight',active: {}},
-            {letter: 'fn', code: '',active: {}},
-            {letter: 'Ctrl', code: 'ControlRight',active: {}},
-          ]
-      ],
-      keyboardDVORAK: [
-          ['dvorak'],
-          [
-            {letter: 'Esc', code: 'Escape',active: {}},
-            {letter: '1 !', code: 'Digit1',active: {}},
-            {letter: '2 @', code: 'Digit2',active: {}},
-            {letter: '3 #', code: 'Digit3',active: {}},
-            {letter: '4 $', code: 'Digit4',active: {}},
-            {letter: '5 %', code: 'Digit5',active: {}},
-            {letter: '6 ^', code: 'Digit6',active: {}},
-            {letter: '7 &', code: 'Digit7',active: {}},
-            {letter: '8 *', code: 'Digit8',active: {}},
-            {letter: '9 (', code: 'Digit9',active: {}},
-            {letter: '0 )', code: 'Digit0',active: {}},
-            {letter: '[ {', code: 'BracketLeft',active: {}},
-            {letter: '] }', code: 'BracketRight',active: {}},
-            {letter: 'Backspace', code: 'Backspace',active: {}},
-          ],
-          [
-            {letter: 'Tab', code: 'Tab',active: {}},
-            {letter: `' "`, code: 'Quote',active: {}},
-            {letter: ', <', code: 'Comma',active: {}},
-            {letter: '. >', code: 'Period',active: {}},
-            {letter: 'P', code: 'KeyP',active: {}},
-            {letter: 'Y', code: 'KeyY',active: {}},
-            {letter: 'F', code: 'KeyF',active: {}},
-            {letter: 'G', code: 'KeyG',active: {}},
-            {letter: 'C', code: 'KeyC',active: {}},
-            {letter: 'R', code: 'KeyR',active: {}},
-            {letter: 'L', code: 'KeyL',active: {}},
-            {letter: '/ ?', code: 'Slash',active: {}},
-            {letter: '= +', code: 'Equal',active: {}},
-            {letter: '\\ |', code: 'Backslash',active: {}},
-          ],
-          [
-            {letter: 'Caps', code: 'CapsLock',active: {}},
-            {letter: 'A', code: 'KeyA',active: {}},
-            {letter: 'O', code: 'KeyO',active: {}},
-            {letter: 'E', code: 'KeyE',active: {}},
-            {letter: 'U', code: 'KeyU',active: {}},
-            {letter: 'I', code: 'KeyI',active: {}},
-            {letter: 'D', code: 'KeyD',active: {}},
-            {letter: 'H', code: 'KeyH',active: {}},
-            {letter: 'T', code: 'KeyT',active: {}},
-            {letter: 'N', code: 'KeyN',active: {}},
-            {letter: 'S', code: 'KeyS',active: {}},
-            {letter: "- _", code: 'Minus',active: {}},
-            {letter: 'Enter', code: 'Enter',active: {}},
-          ],
-          [
-            {letter: 'Shift', code: 'ShiftLeft',active: {}},
-            {letter: '; :', code: 'Semicolon',active: {}},
-            {letter: 'Q', code: 'KeyQ',active: {}},
-            {letter: 'J', code: 'KeyJ',active: {}},
-            {letter: 'K', code: 'KeyK',active: {}},
-            {letter: 'X', code: 'KeyX',active: {}},
-            {letter: 'B', code: 'KeyB',active: {}},
-            {letter: 'M', code: 'KeyM',active: {}},
-            {letter: 'W', code: 'KeyW',active: {}},
-            {letter: 'V', code: 'KeyV',active: {}},
-            {letter: 'Z', code: 'KeyZ',active: {}},
-            {letter: 'Shift', code: 'ShiftRight',active: {}},
-          ],
-          [
-            {letter: 'Ctrl', code: 'ControlLeft',active: {}},
-            {letter: 'win', code: 'MetaRight',active: {}},
-            {letter: 'Alt', code: 'AltRight',active: {}},
-            {letter: 'Space', code: 'Space',active: {}},
-            {letter: 'Alt',code: 'AltRight', active: {}},
-            {letter: 'win', code: 'MetaRight',active: {}},
-            {letter: 'fn', code: '',active: {}},
-            {letter: 'Ctrl', code: 'ControlRight',active: {}},
-          ]
-      ],
-      keyboardCOLEMAK: [
-          ['colemak'],
-          [
-            {letter: 'Esc', code: 'Escape',active: {}},
-            {letter: '1 !', code: 'Digit1',active: {}},
-            {letter: '2 @', code: 'Digit2',active: {}},
-            {letter: '3 #', code: 'Digit3',active: {}},
-            {letter: '4 $', code: 'Digit4',active: {}},
-            {letter: '5 %', code: 'Digit5',active: {}},
-            {letter: '6 ^', code: 'Digit6',active: {}},
-            {letter: '7 &', code: 'Digit7',active: {}},
-            {letter: '8 *', code: 'Digit8',active: {}},
-            {letter: '9 (', code: 'Digit9',active: {}},
-            {letter: '0 )', code: 'Digit0',active: {}},
-            {letter: '- _', code: 'Minus',active: {}},
-            {letter: '= +', code: 'Equal',active: {}},
-            {letter: 'Backspace', code: 'Backspace',active: {}},
-          ],
-          [
-            {letter: 'Tab', code: 'Tab',active: {}},
-            {letter: 'Q', code: 'KeyQ',active: {}},
-            {letter: 'W', code: 'KeyW',active: {}},
-            {letter: 'F', code: 'KeyF',active: {}},
-            {letter: 'P', code: 'KeyP',active: {}},
-            {letter: 'G', code: 'KeyG',active: {}},
-            {letter: 'J', code: 'KeyJ',active: {}},
-            {letter: 'L', code: 'KeyL',active: {}},
-            {letter: 'U', code: 'KeyU',active: {}},
-            {letter: 'Y', code: 'KeyY',active: {}},
-            {letter: '; :', code: 'Semicolon',active: {}},
-            {letter: '[ {', code: 'BracketLeft',active: {}},
-            {letter: '] }', code: 'BracketRight',active: {}},
-            {letter: '\\ |', code: 'Backslash',active: {}},
-          ],
-          [
-            {letter: 'Backspace', code: 'Backspace',active: {}},
-            {letter: 'A', code: 'KeyA',active: {}},
-            {letter: 'R', code: 'KeyR',active: {}},
-            {letter: 'S', code: 'KeyS',active: {}},
-            {letter: 'T', code: 'KeyT',active: {}},
-            {letter: 'D', code: 'KeyD',active: {}},
-            {letter: 'H', code: 'KeyH',active: {}},
-            {letter: 'N', code: 'KeyN',active: {}},
-            {letter: 'E', code: 'KeyE',active: {}},
-            {letter: 'I', code: 'KeyI',active: {}},
-            {letter: 'O', code: 'KeyO',active: {}},
-            {letter: `' "`, code: 'Quote',active: {}},
-            {letter: 'Enter', code: 'Enter',active: {}},
-          ],
-          [
-            {letter: 'Shift', code: 'ShiftLeft',active: {}},
-            {letter: 'Z', code: 'KeyZ',active: {}},
-            {letter: 'X', code: 'KeyX',active: {}},
-            {letter: 'C', code: 'KeyC',active: {}},
-            {letter: 'V', code: 'KeyV',active: {}},
-            {letter: 'B', code: 'KeyB',active: {}},
-            {letter: 'K', code: 'KeyK',active: {}},
-            {letter: 'M', code: 'KeyM',active: {}},
-            {letter: ', <', code: 'Comma',active: {}},
-            {letter: '. >', code: 'Period',active: {}},
-            {letter: '/ ?', code: 'Slash',active: {}},
-            {letter: 'Shift', code: 'ShiftRight',active: {}},
-          ],
-          [
-            {letter: 'Ctrl', code: 'ControlLeft',active: {}},
-            {letter: 'win', code: 'MetaRight',active: {}},
-            {letter: 'Alt', code: 'AltRight',active: {}},
-            {letter: 'Space', code: 'Space',active: {}},
-            {letter: 'Alt',code: 'AltRight', active: {}},
-            {letter: 'win', code: 'MetaRight',active: {}},
-            {letter: 'fn', code: '',active: {}},
-            {letter: 'Ctrl', code: 'ControlRight',active: {}},
-          ]
-      ],
-      keyboardWORKMAN: [
-        ['workman'],
-          [
-            {letter: 'Esc', code: 'Escape',active: {}},
-            {letter: '1 !', code: 'Digit1',active: {}},
-            {letter: '2 @', code: 'Digit2',active: {}},
-            {letter: '3 #', code: 'Digit3',active: {}},
-            {letter: '4 $', code: 'Digit4',active: {}},
-            {letter: '5 %', code: 'Digit5',active: {}},
-            {letter: '6 ^', code: 'Digit6',active: {}},
-            {letter: '7 &', code: 'Digit7',active: {}},
-            {letter: '8 *', code: 'Digit8',active: {}},
-            {letter: '9 (', code: 'Digit9',active: {}},
-            {letter: '0 )', code: 'Digit0',active: {}},
-            {letter: '- _', code: 'Minus',active: {}},
-            {letter: '= +', code: 'Equal',active: {}},
-            {letter: 'Backspace', code: 'Backspace',active: {}},
-          ],
-          [
-            {letter: 'Tab', code: 'Tab',active: {}},
-            {letter: 'Q', code: 'KeyQ',active: {}},
-            {letter: 'D', code: 'KeyD',active: {}},
-            {letter: 'R', code: 'KeyR',active: {}},
-            {letter: 'W', code: 'KeyW',active: {}},
-            {letter: 'B', code: 'KeyB',active: {}},
-            {letter: 'J', code: 'KeyJ',active: {}},
-            {letter: 'F', code: 'KeyF',active: {}},
-            {letter: 'U', code: 'KeyU',active: {}},
-            {letter: 'P', code: 'KeyP',active: {}},
-            {letter: '; :', code: 'Semicolon',active: {}},
-            {letter: '[ {', code: 'BracketLeft',active: {}},
-            {letter: '] }', code: 'BracketRight',active: {}},
-            {letter: '\\ |', code: 'Backslash',active: {}},
-          ],
-          [
-            {letter: 'Backspace', code: 'Backspace',active: {}},
-            {letter: 'A', code: 'KeyA',active: {}},
-            {letter: 'S', code: 'KeyS',active: {}},
-            {letter: 'H', code: 'KeyH',active: {}},
-            {letter: 'T', code: 'KeyT',active: {}},
-            {letter: 'G', code: 'KeyG',active: {}},
-            {letter: 'Y', code: 'KeyY',active: {}},
-            {letter: 'N', code: 'KeyN',active: {}},
-            {letter: 'E', code: 'KeyE',active: {}},
-            {letter: 'O', code: 'KeyO',active: {}},
-            {letter: 'I', code: 'KeyI',active: {}},
-            {letter: `' "`, code: 'Quote',active: {}},
-            {letter: 'Enter', code: 'Enter',active: {}},
-          ],
-          [
-            {letter: 'Shift', code: 'ShiftLeft',active: {}},
-            {letter: 'Z', code: 'KeyZ',active: {}},
-            {letter: 'X', code: 'KeyX',active: {}},
-            {letter: 'M', code: 'KeyM',active: {}},
-            {letter: 'C', code: 'KeyC',active: {}},
-            {letter: 'V', code: 'KeyV',active: {}},
-            {letter: 'K', code: 'KeyK',active: {}},
-            {letter: 'L', code: 'KeyL',active: {}},
-            {letter: ', <', code: 'Comma',active: {}},
-            {letter: '. >', code: 'Period',active: {}},
-            {letter: '/ ?', code: 'Slash',active: {}},
-            {letter: 'Shift', code: 'ShiftRight',active: {}},
-          ],
-          [
-            {letter: 'Ctrl', code: 'ControlLeft',active: {}},
-            {letter: 'win', code: 'MetaRight',active: {}},
-            {letter: 'Alt', code: 'AltRight',active: {}},
-            {letter: 'Space', code: 'Space',active: {}},
-            {letter: 'Alt',code: 'AltRight', active: {}},
-            {letter: 'win', code: 'MetaRight',active: {}},
-            {letter: 'fn', code: '',active: {}},
-            {letter: 'Ctrl', code: 'ControlRight',active: {}},
-          ]
-      ],
+      keyboardQWERTY: keyboardQWERTY,
+      keyboardDVORAK: keyboardDVORAK,
+      keyboardCOLEMAK: keyboardCOLEMAK,
+      keyboardWORKMAN: keyboardWORKMAN,
 
       // aktywny układy klawiatury
       // active keyboard layout
@@ -877,6 +577,7 @@ export default {
   // funkje ktore wywołują się po załadowaniu stronu
   // functions that are called when the page is loaded
   async created() {
+    console.log(API_URL)
     this.keyboard =  this.keyboardQWERTY;
     this.loadWords();
 
@@ -888,7 +589,7 @@ export default {
       console.log('cannot find id user')
     }
     else{
-      await axios.get(`${this.API_URL}/users/${this.userCookie.id}`)
+      await axios.get(`${API_URL}/users/${this.userCookie.id}`)
       .then((res) => {
         this.userInfo = res.data
       })
@@ -898,7 +599,6 @@ export default {
   async mounted(){
     await this.$refs.focusInputToWrite.focus();
   },
-
   methods: {
     // definiowanie funkcji ktora ma za zadanie wysyłanie do bazy danych najlepszych wynikow jakie uzyskał użytkownik
     // defining the function that sends the best results obtained to the user to the database
@@ -909,7 +609,7 @@ export default {
       else{
         if(this.timeSpentPlus === 15){
           if(this.wordsPerMinuteEnd > this.userInfo.bestWPM15){
-            await axios.put(`${this.API_URL}/users/${this.IDuser}` , {
+            await axios.put(`${API_URL}/users/${this.IDuser}` , {
               bestWPM15: this.wordsPerMinuteEnd,
               accuracy15: this.accuracyEnd,
               bestWPM60: this.userInfo.bestWPM60,
@@ -921,7 +621,7 @@ export default {
         }
         if(this.timeSpentPlus === 60){
           if(this.wordsPerMinuteEnd > this.userInfo.bestWPM60){
-            await axios.put(`${this.API_URL}/users/${this.IDuser}` , {
+            await axios.put(`${API_URL}/users/${this.IDuser}` , {
             bestWPM15: this.userInfo.bestWPM15,
             accuracy15: this.userInfo.accuracy15,
             bestWPM60: this.wordsPerMinuteEnd,
@@ -1023,8 +723,8 @@ export default {
         this.disabled = true;
         this.wordsPerMinuteEnd = this.wordsPerMinute
         this.accuracyEnd = this.accuracy
-        this.checkLetterInterval = null
-        // clearInterval(this.checkLetterInterval)
+        // this.checkLetterInterval = null
+        clearInterval(this.checkLetterInterval)
 
         if(this.useOnceAfterTimeZero) {
           this.sendBestUserStats()
@@ -1060,7 +760,7 @@ export default {
 
       this.checkLetterAndPushWords()
 
-      clearInterval(this.checkLetterInterval)
+      // clearInterval(this.checkLetterInterval)
     },
 
     // funkcja do zmiennej timer (do metody setInterval())
@@ -1068,10 +768,21 @@ export default {
     // przekazywac dane do tablicy, ktora jest potrzebna do wykresow , aż czas bedzie rowny 0
     // function for use in timer
     timerFunction(){
-      if(this.timeSpent == 0){
+      if(this.timeSpent == 1){
         this.isStopTime = false;
         this.AFKdetectorEnabled = false;
         this.reloaded = false
+
+        this.isEndTest = true;
+        this.opacityStart.opacity = 0;
+        this.disabled = true;
+        this.wordsPerMinuteEnd = this.wordsPerMinute
+        this.accuracyEnd = this.accuracy
+
+        if(this.useOnceAfterTimeZero) {
+          this.sendBestUserStats()
+          this.useOnceAfterTimeZero = false
+        }
       }
       else{
         if(this.isStopTime){
@@ -1095,9 +806,9 @@ export default {
       this.opacityElements = {
         'transition': '.2s opacity',
         'opacity': '.5'
-      },
+      };
 
-      this.checkLetterInterval = setInterval(this.checkLetterAndPushWords,0)
+      // this.checkLetterInterval = setInterval(this.checkLetterAndPushWords,0)
 
       if(this.isStopTime === false) {
         this.timer = setInterval(this.timerFunction, 1000)
@@ -1105,6 +816,7 @@ export default {
 
       this.isStopTime = true;
       this.marginLineBehindLetter.animationIterationCount = 0;
+
 
       // podświetlanie klawiszy, ktore zostana naciśnięte (dla klawiatury ekranowej)
       // backlight of the keys to be pressed (for screen keyboard)
@@ -1186,22 +898,6 @@ export default {
       this.isLayerSett = !this.isLayerSett;
       this.isShowMain = !this.isShowMain;
       this.isAlertSuccess = false;
-      this.reload();
-    },
-
-    // zamyka lub wyswietla najlepszych zajerestrowanych użytkowników
-    // closes or displays top registered users
-    async showLayerTopUsers(){
-      this.isLayerTopUsers = !this.isLayerTopUsers
-      this.isLayerSett = false
-      this.isShowMain = !this.isShowMain;
-      await axios
-      .get(`${this.API_URL}/users/topPlayers`)
-      .then((response) =>{
-        this.topUsers15 = response.data.topUsers15
-        this.topUsers60 = response.data.topUsers60
-      })
-      .catch((err) => console.log(err))
       this.reload();
     },
 
@@ -1326,11 +1022,11 @@ export default {
 
     // odświeżanie zmiennych
     // refreshing variables
-    async reload(){
+    reload(){
       // musi byc setTimeout bo nie czyta DOMu a async/await nie dziala
-      // setTimeout(()=>{
-      await this.$refs.focusInputToWrite.focus();
-      // },0)
+      setTimeout(()=>{
+        this.$refs.focusInputToWrite.focus();
+      },0)
       this.focusInput = false;
 
       this.valueInputToWrite = '';
@@ -1362,9 +1058,86 @@ export default {
       this.loadWords();
 
       clearInterval(this.timer)
-      clearInterval(this.checkLetterInterval)
+      // clearInterval(this.checkLetterInterval)
     },
   },
+  watch: {
+    valueInputToWrite: function(newValueInputToWrite, oldValueInputToWrite){
+      // this.valueInputLength += 1
+      if(this.wordsOnPage.length < 9){
+        const x = Math.floor(Math.random()*50);
+        this.wordsOnPage.push({word: this.words[x].word, id: 9, letters: []});
+      }
+
+      // dodawaine do tablicy letters obiekt potrzebny do sparwdzania poprawnosci liter
+      // adding to the letters array to the object needed to validate letters
+      if(this.wordsOnPage[0].letters.length === 0){
+        for(let i = 0; i < this.wordsOnPage[0].word.length; i++){
+          this.wordsOnPage[0].letters.push({
+            letter: this.wordsOnPage[0].word[i],
+            id: i,
+            correctness: null
+          });
+        }
+      }
+      // dodawanie odpowiedniego id dla słów
+      // adding the appropriate id for words
+      this.wordsOnPage.forEach((word,index) => {
+        word.id = index + 1
+      })
+
+      // zmienianie marginesu lini ,ktora wskazuje gdzie uzytkownik aktualnie pisze
+      // changing the line margin that indicates where the user is currently typing
+      for(let i=0; i<=20; i++){
+        switch(newValueInputToWrite.length){
+          case i:
+            if(this.marginLineBehindLetter.type){
+              this.marginLineBehindLetter.left = `${i*0.9}rem`;
+            }
+            if(this.marginWordAfterKeyup.type){
+              this.marginWordAfterKeyup.marginLeft = `-${i*0.9}rem`;
+            }
+            break;
+        }
+      }
+      // sprawdzanie pojedynczych liter i przypisywanie im koloru
+      // checking individual letters and assigning them a color
+      if(this.numberOfLetter > this.wordsOnPage[0].letters.length-1){
+        this.numberOfLetter = this.wordsOnPage[0].letters.length-1;
+      }
+
+      if(newValueInputToWrite === ''){
+        this.numberOfLetter = 0
+      }
+
+      this.letterOfValue = this.wordsOnPage[0].letters[this.numberOfLetter].letter;
+
+      if(newValueInputToWrite[this.numberOfLetter] === this.letterOfValue){
+        this.wordsOnPage[0].letters[this.numberOfLetter].correctness = {color: 'green'};
+        this.numberOfLetter = newValueInputToWrite.length;
+      }
+      else if(newValueInputToWrite.length <= 0){
+        this.correctness = null;
+      }
+      else{
+        this.wordsOnPage[0].letters[this.numberOfLetter].correctness = {color: 'red'};
+        this.numberOfLetter = newValueInputToWrite.length;
+      }
+
+      for(let i = this.numberOfLetter; i < this.wordsOnPage[0].letters.length; i++){
+        this.wordsOnPage[0].letters[i].correctness = {color: this.colorStrongSub};
+      }
+
+      // Podczas gdy czas na pisanie bedzie rowny 0 wykona sie wyswietlenie wynikow jakie osiagnał uzytkownik ,
+      // w przeciwnym wypadku uzywa sie funkcja addExcessLetters i oblicza sie words per minute
+      // sending data and displaying or calculating wpm and calling the addExcessLetters function
+      if(this.timeSpent == 0) return
+      else{
+        this.addExcessLetters()
+        this.wordsPerMinute = ((this.goodLetters/5)*60/(this.timeSpentPlus+1)).toFixed(2);
+      }
+    }
+  }
 }
 </script>
 

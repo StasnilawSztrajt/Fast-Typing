@@ -279,10 +279,7 @@ export default {
     return{
       // zmienne przekazywane z backendu poprzez axios
       // variables passed from the backend through axios
-      topUsers15: {},
-      topUsers60: {},
       IDuser: '',
-      _id: '',
       userInfo: {},
       userCookie: this.$cookies.get('user'),
 
@@ -607,7 +604,7 @@ export default {
         console.log('user is not logged in')
       }
       else{
-        if(this.timeSpentPlus === 15){
+        if(this.timeSpentPlus === 14){
           if(this.wordsPerMinuteEnd > this.userInfo.bestWPM15){
             await axios.put(`${API_URL}/users/${this.IDuser}` , {
               bestWPM15: this.wordsPerMinuteEnd,
@@ -619,7 +616,7 @@ export default {
             .catch((err) => console.log(err))
           }
         }
-        if(this.timeSpentPlus === 60){
+        if(this.timeSpentPlus === 59){
           if(this.wordsPerMinuteEnd > this.userInfo.bestWPM60){
             await axios.put(`${API_URL}/users/${this.IDuser}` , {
             bestWPM15: this.userInfo.bestWPM15,
@@ -721,14 +718,14 @@ export default {
         this.isEndTest = true;
         this.opacityStart.opacity = 0;
         this.disabled = true;
-        this.wordsPerMinuteEnd = this.wordsPerMinute
-        this.accuracyEnd = this.accuracy
+        this.wordsPerMinuteEnd = this.wordsPerMinute;
+        this.accuracyEnd = this.accuracy;
         // this.checkLetterInterval = null
-        clearInterval(this.checkLetterInterval)
+        clearInterval(this.checkLetterInterval);
 
         if(this.useOnceAfterTimeZero) {
-          this.sendBestUserStats()
-          this.useOnceAfterTimeZero = false
+          this.sendBestUserStats();
+          this.useOnceAfterTimeZero = false;
         }
       }
       else{
@@ -786,6 +783,7 @@ export default {
       }
       else{
         if(this.isStopTime){
+          this.wordsPerMinute = ((this.goodLetters/5)*60/(this.timeSpentPlus+1)).toFixed(2);
           this.timeSpent--;
           this.timeSpentPlus++;
           this.wpmChartArray.push(this.wordsPerMinute);
@@ -1134,7 +1132,6 @@ export default {
       if(this.timeSpent == 0) return
       else{
         this.addExcessLetters()
-        this.wordsPerMinute = ((this.goodLetters/5)*60/(this.timeSpentPlus+1)).toFixed(2);
       }
     }
   }

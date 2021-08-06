@@ -8,23 +8,23 @@
             class="chartLine"
         />
         <div class="elements">
-            <div class="element" v-if="IDuser != '' && timeSpentPlus === 15">
+            <div class="element" v-if="IDuser != '' && timeSpentPlus === 14">
                 Record words per minute:
                 <div class="element-info">
                     {{ userInfo.bestWPM15 }}wpm
                 </div>
             </div>
-            <div class="element" v-if="IDuser != ''  && timeSpentPlus === 15">
+            <div class="element" v-if="IDuser != ''  && timeSpentPlus === 14">
                 Record accuracy:
                 <div class="element-info">
                     {{ userInfo.accuracy15 }}
                 </div>
             </div>
-            <div class="element" v-if="IDuser != '' && timeSpentPlus === 60">
+            <div class="element" v-if="IDuser != '' && timeSpentPlus === 59">
                 Record words per minute:
                 <div class="element-info">{{ userInfo.bestWPM60 }}wpm</div>
             </div>
-            <div class="element" v-if="IDuser != '' && timeSpentPlus === 60">
+            <div class="element" v-if="IDuser != '' && timeSpentPlus === 59">
                 Record accuracy:
                 <div class="element-info">{{ userInfo.accuracy60 }}</div>
             </div>

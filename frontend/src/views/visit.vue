@@ -2,13 +2,7 @@
     <div>
         <div class="bg"></div>
         <main>
-            <nav>
-                <a href="/"><span>FastTyping</span></a>
-                <a href="/visit/"><i class="fas fa-question"></i></a>
-                <a href="/topUsers/"><i class="fas fa-tachometer-alt"></i></a>
-                <a href="/faq/"><i class="fas fa-headset"></i></a>
-                <a href="/login"><i class="fas fa-sign-in-alt"></i></a>
-            </nav>
+            <MenuForSubRoutes />
             <section>
                 <article>
                     <h3>What is Fast Typing?</h3>
@@ -29,9 +23,13 @@
 </template>
 
 <script>
+import MenuForSubRoutes from '../components/Menu/MenuForSubRoutes'
 
 export default {
-    name: 'visit'
+  name: 'Visit',
+  components: {
+    MenuForSubRoutes
+  }
 }
 </script>
 

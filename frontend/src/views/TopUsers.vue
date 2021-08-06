@@ -5,13 +5,7 @@
         <h1 style="margin-top: 10vh; text-align: center">Loading...</h1>
       </div>
       <div class="topUsersLayer" v-else>
-        <nav>
-          <a href="/"><span>FastTyping</span></a>
-          <a href="/visit/"><i class="fas fa-question"></i></a>
-          <a href="/topUsers/"><i class="fas fa-tachometer-alt"></i></a>
-          <a href="/faq/"><i class="fas fa-headset"></i></a>
-          <a href="/login" class="login" ><i class="fas fa-sign-in-alt"></i> {{ $cookies.get('user').username }}</a>
-        </nav>
+        <MenuForSubRoutes />
         <h1><i class="fas fa-crown"></i> Global Ranking users FastTyping<i class="fas fa-crown"></i></h1>
         <div class="topUsers">
           <div class="topUsers15">
@@ -51,9 +45,14 @@
 <script>
 import axios from 'axios'
 
+import MenuForSubRoutes from '../components/Menu/MenuForSubRoutes.vue'
+
 import API_URL from '../API_URL'
 
 export default {
+  components: {
+    MenuForSubRoutes
+  },
   data(){
     return{
       users: [],

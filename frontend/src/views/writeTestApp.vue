@@ -606,11 +606,15 @@ export default {
       else{
         if(this.timeSpentPlus === 14){
           if(this.wordsPerMinuteEnd > this.userInfo.bestWPM15){
-            await axios.put(`${API_URL}/users/${this.IDuser}` , {
+            await axios.put(`${API_URL}/users/${this.IDuser}` ,
+            {
               bestWPM15: this.wordsPerMinuteEnd,
               accuracy15: this.accuracyEnd,
               bestWPM60: this.userInfo.bestWPM60,
               accuracy60: this.userInfo.accuracy60,
+            },
+            {
+              headers: `Bearer ${this.$cookies.get('jwt')}`
             })
             .then((response) => console.log('Stats have got edit: ', response))
             .catch((err) => console.log(err))
@@ -618,12 +622,16 @@ export default {
         }
         if(this.timeSpentPlus === 59){
           if(this.wordsPerMinuteEnd > this.userInfo.bestWPM60){
-            await axios.put(`${API_URL}/users/${this.IDuser}` , {
-            bestWPM15: this.userInfo.bestWPM15,
-            accuracy15: this.userInfo.accuracy15,
-            bestWPM60: this.wordsPerMinuteEnd,
-            accuracy60: this.accuracyEnd
-          })
+            await axios.put(`${API_URL}/users/${this.IDuser}` ,
+            {
+              bestWPM15: this.userInfo.bestWPM15,
+              accuracy15: this.userInfo.accuracy15,
+              bestWPM60: this.wordsPerMinuteEnd,
+              accuracy60: this.accuracyEnd
+            },
+            {
+              headers: `Bearer ${this.$cookies.get('jwt')}`
+            })
             .then((response) => console.log('Stats have got edit: ', response))
             .catch((err) => console.log(err))
           }

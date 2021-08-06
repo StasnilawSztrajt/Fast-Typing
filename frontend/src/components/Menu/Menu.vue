@@ -20,15 +20,11 @@ export default {
     name: 'Menu',
     props: {
         isLayerSett:     Boolean,
-        isLayerTopUsers: Boolean,
         userInfo:      Object,
     },
     methods: {
         showLayerSett(){
             this.$emit('show-layer-sett')
-        },
-        showLayerTopUsers(){
-            this.$emit('show-layer-top-users')
         },
     },
 }

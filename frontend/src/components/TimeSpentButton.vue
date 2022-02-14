@@ -3,8 +3,9 @@
         <span
             :class="{opacityColorTimeSpent,normalColorTimeSpent}"
             @click="opacityTimeSpent"
-            :style="opacityStart">
-            {{ timeSpent }}
+            :style="opacityStart"
+        >
+        {{ timeSpent }}
         </span>
     </div>
 </template>

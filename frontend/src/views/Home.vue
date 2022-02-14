@@ -1,26 +1,26 @@
-<template @load="loadWords">
+<template>
   <div id="app" >
     <!-- Pobieranie elementow z compenent i wyswietlanie ich przez <NazwaComponentu /> -->
     <!-- Getting items from a component and displaying them by <NameCompenent /> -->
     <div class="menu" :style="styleBody">
       <Menu
         :userInfo="userInfo"
-        :isLayerSett="isLayerSett"
-        @show-layer-sett="showLayerSett"
+        :isLayerSettingsOpen="isLayerSettingsOpen"
+        @show-layer-settings="showLayerSettings"
       />
       <div class="settings">
-        <div class="settings-blur" v-show="isAlphabetTip"></div>
+        <div class="settings-blur" v-if="isAlphabetTip"></div>
         <AlphabetTip
           :isAlphabetTip="isAlphabetTip"
           @show-alphabet-tip="showAlphabetTip"
         />
-        <div class="setting" v-show="isLayerSett">
+        <div class="setting" v-show="isLayerSettingsOpen">
           <SuccessAlert
             :isAlertSuccess="isAlertSuccess"
             @close-alert="closeAlert"
           />
           <CrossToCloseSettings
-            @show-layer-sett="showLayerSett"
+            @show-layer-settings="showLayerSettings"
           />
           <div class="setting-flex">
             <div class="grid-elements">
@@ -44,11 +44,11 @@
                 @change-type-of-writing2="changeTypeOfWriting2"
               />
               <LiveScoreSettings
-                :isShowScore="isShowScore"
+                :isScoreOn="isScoreOn"
                 @show-live-score="showLiveScore"
               />
               <ScreenKeyboardSettings
-                :isShowKeyboard="isShowKeyboard"
+                :isKeyboardOn="isKeyboardOn"
                 :keyboardQWERTY="keyboardQWERTY"
                 :keyboardDVORAK="keyboardDVORAK"
                 :keyboardCOLEMAK="keyboardCOLEMAK"
@@ -65,9 +65,9 @@
     <ScreenKeyboard
       :keyboard="keyboard"
       :style="opacityStart"
-      v-show="isShowKeyboardBool"
+      v-show="isKeyboardOnBoolean"
     />
-    <main v-show="isShowMain">
+    <main v-show="isMainOn">
       <EndScore
         v-if="isEndTest"
         :wordsPerMinute="wordsPerMinute"
@@ -76,7 +76,7 @@
         :accuracy="accuracy"
         :userInfo="userInfo"
         :timeSpentPlus="timeSpentPlus"
-        :IDuser="IDuser"
+        :user_id="user.id"
         :wpmChartTimeArray="wpmChartTimeArray"
         :wpmChartArray="wpmChartArray"
         :isEndTest="isEndTest"
@@ -150,8 +150,8 @@
         :wrongLetters="wrongLetters"
         :goodLetters="goodLetters"
         :accuracy="accuracy"
-        :isShowScore="isShowScore"
-        :isShowScoreBool="isShowScoreBool"
+        :isScoreOn="isScoreOn"
+        :isScoreOnBoolean="isScoreOnBoolean"
         :style="opacityStart"
       />
 
@@ -177,7 +177,6 @@ import TimeSettings from '../components/Menu/Settings/TimeSettings';
 import WritingSettings from '../components/Menu/Settings/WritingSettings';
 import LiveScoreSettings from '../components/Menu/Settings/LiveScoreSettings';
 import ScreenKeyboardSettings from '../components/Menu/Settings/ScreenKeyboardSettings';
-
 
 import ScreenKeyboard from '../components/Menu/Settings/ScreenKeyboard';
 import AlertsFocus from '../components/AlertsFocus';
@@ -248,7 +247,7 @@ import Zz from '../languages/alphabet/z.json'
 import API_URL from '../API_URL'
 
 export default {
-  name: 'writeTestApp',
+  name: 'Home',
   // Przekazywanie importowanych componentow do components
   // Uploading imported components to components
   components: {
@@ -279,9 +278,9 @@ export default {
     return{
       // zmienne przekazywane z backendu poprzez axios
       // variables passed from the backend through axios
-      IDuser: '',
       userInfo: {},
-      userCookie: this.$cookies.get('user'),
+      user: this.$cookies.get('user') ? this.$cookies.get('user') : false,
+      jwt: this.$cookies.get('jwt') ?  this.$cookies.get('jwt') : false,
 
       // Tablica , w której znajdują sie nazwy jezykow oraz ich plik .json
       // Array include the names of the languages and their .json file
@@ -445,7 +444,6 @@ export default {
       colorStrong: '#f5ba3',
       colorSub: '#b3b3b3b9',
       colorStrongSub: '#c5c5c5',
-      zajeColor: '#d1d0c5',
 
       // zmienne z głownego input
       // variables main input
@@ -464,12 +462,12 @@ export default {
       // variables for : v-show / v-if / :class
       normalColorTimeSpent: true,
       opacityColorTimeSpent: false,
-      isLayerSett: false,
+      isLayerSettingsOpen: false,
       isLayerTopUsers: false,
       isStopTime: false,
       natural: true,
       isEndTest: false,
-      isShowMain: true,
+      isMainOn: true,
       isAlertSuccess: false,
       isAlphabetTip: false,
       isKeyboardTip: false,
@@ -485,22 +483,22 @@ export default {
 
       // zmienne wyników na żywo
       // live score variables
-      isShowScore: 'OFF',
-      isShowScoreBool: false,
+      isScoreOn: 'OFF',
+      isScoreOnBoolean: false,
 
       // zmienne klawiatury ekranowej
       // variables screen keyboard
-      isShowKeyboard: 'OFF',
-      isShowKeyboardBool: false,
+      isKeyboardOn: 'OFF',
+      isKeyboardOnBoolean: false,
 
       // zmienne powiązane ze słowami na minutę
       // variables bound to words per minute
       wordsPerMinute: 0,
-      wordsPerMinuteEnd: 0,
+      wordsPerMinuteScore: 0,
       wrongLetters: 0,
       goodLetters: 0,
       accuracy: '',
-      accuracyEnd: '',
+      accuracyScore: '',
       wpmChartArray: [],
       wpmChartTimeArray: [],
 
@@ -529,7 +527,7 @@ export default {
       // different variables
       useOnceAfterTimeZero: true,
       timeToChangeArray: [5,10,15,30,60,120],
-      reloaded: true,
+      isReloaded: true,
 
       // zmeinne potrzebne do wykorzystania :style
       // The variables needed to be used with :style
@@ -546,7 +544,6 @@ export default {
         'marginLeft': '0',
         type: false,
       },
-
 
       // tablia w ktorej znajdują sie wszystkie słowa
       // The array with all the words
@@ -574,22 +571,14 @@ export default {
   // funkje ktore wywołują się po załadowaniu stronu
   // functions that are called when the page is loaded
   async created() {
-    console.log(API_URL)
     this.keyboard =  this.keyboardQWERTY;
     this.loadWords();
 
-    this.IDuser = this.userCookie.id ? this.userCookie.id : '';
-
     // pobieranie informacji o najlepszych zajerestrowanych użytkownikach
     // gets information about the best registered users
-    if(this.IDuser === ''){
-      console.log('cannot find id user')
-    }
-    else{
-      await axios.get(`${API_URL}/users/${this.userCookie.id}`)
-      .then((res) => {
-        this.userInfo = res.data
-      })
+    if(this.jwt){
+      await axios.get(`${API_URL}/users/me`, { headers: { Authorization: `Bearer ${this.jwt}` } })
+      .then(res => this.userInfo = res.data)
       .catch((err) => console.log(err))
     }
   },
@@ -599,41 +588,30 @@ export default {
   methods: {
     // definiowanie funkcji ktora ma za zadanie wysyłanie do bazy danych najlepszych wynikow jakie uzyskał użytkownik
     // defining the function that sends the best results obtained to the user to the database
-    async sendBestUserStats(){
-      if(this.IDuser === ''){
-        console.log('user is not logged in')
-      }
-      else{
+    async updateUserStats(){
+      if(this.jwt){
         if(this.timeSpentPlus === 14){
-          if(this.wordsPerMinuteEnd > this.userInfo.bestWPM15){
-            await axios.put(`${API_URL}/users/${this.IDuser}` ,
-            {
-              bestWPM15: this.wordsPerMinuteEnd,
-              accuracy15: this.accuracyEnd,
+          if(this.wordsPerMinuteScore > this.userInfo.bestWPM15){
+            const data = {
+              bestWPM15: this.wordsPerMinuteScore,
+              accuracy15: this.accuracyScore,
               bestWPM60: this.userInfo.bestWPM60,
               accuracy60: this.userInfo.accuracy60,
-            },
-            {
-              headers: `Bearer ${this.$cookies.get('jwt')}`
-            })
-            .then((response) => console.log('Stats have got edit: ', response))
-            .catch((err) => console.log(err))
+            }
+
+            await axios.put(`${API_URL}/users/me`, data, { headers: { Authorization: `Bearer ${this.jwt}` } })
           }
         }
         if(this.timeSpentPlus === 59){
-          if(this.wordsPerMinuteEnd > this.userInfo.bestWPM60){
-            await axios.put(`${API_URL}/users/${this.IDuser}` ,
-            {
+          if(this.wordsPerMinuteScore > this.userInfo.bestWPM60){
+            const data = {
               bestWPM15: this.userInfo.bestWPM15,
               accuracy15: this.userInfo.accuracy15,
-              bestWPM60: this.wordsPerMinuteEnd,
-              accuracy60: this.accuracyEnd
-            },
-            {
-              headers: `Bearer ${this.$cookies.get('jwt')}`
-            })
-            .then((response) => console.log('Stats have got edit: ', response))
-            .catch((err) => console.log(err))
+              bestWPM60: this.wordsPerMinuteScore,
+              accuracy60: this.accuracyScore
+            }
+
+            await axios.put(`${API_URL}/users/me`, data ,{ headers: { Authorization: `Bearer ${this.jwt}` } })
           }
         }
       }
@@ -642,14 +620,13 @@ export default {
     //definiowanie funkcji ktora ma za zadanie dodawac nadmiar liter , ktore wprowadził użytkownik
     //defining a function that is supposed to add excess letters entered by the user
     addExcessLetters(){
-      if(this.valueInputToWrite.length  > this.wordsOnPage[0].word.length){
+      if(this.valueInputToWrite.length > this.wordsOnPage[0].word.length){
         this.excessLetters = this.valueInputToWrite
         this.excessLetters = this.excessLetters.split('')
         for(let i = 0; i<this.wordsOnPage[0].word.length; i++){
           this.excessLetters.shift()
         }
-      }
-      else {
+      } else {
         this.excessLetters = []
       }
     },
@@ -657,8 +634,8 @@ export default {
     async checkLetterAndPushWords(){
       // this.valueInputLength += 1
       if(this.wordsOnPage.length < 9){
-        const x = Math.floor(Math.random()*50);
-        this.wordsOnPage.push({word: this.words[x].word, id: 9, letters: []});
+        const random = Math.floor(Math.random()*50);
+        this.wordsOnPage.push({word: this.words[random].word, id: 9, letters: []});
       }
 
       // dodawaine do tablicy letters obiekt potrzebny do sparwdzania poprawnosci liter
@@ -726,13 +703,13 @@ export default {
         this.isEndTest = true;
         this.opacityStart.opacity = 0;
         this.disabled = true;
-        this.wordsPerMinuteEnd = this.wordsPerMinute;
-        this.accuracyEnd = this.accuracy;
+        this.wordsPerMinuteScore = this.wordsPerMinute;
+        this.accuracyScore = this.accuracy;
         // this.checkLetterInterval = null
         clearInterval(this.checkLetterInterval);
 
         if(this.useOnceAfterTimeZero) {
-          this.sendBestUserStats();
+          this.updateUserStats();
           this.useOnceAfterTimeZero = false;
         }
       }
@@ -759,13 +736,11 @@ export default {
 
       //loading words
       this.wordsOnPage.forEach(word =>{
-        const x = Math.floor(Math.random()*this.numberWords);
-        word.word =  this.words[x].word;
+        const random = Math.floor(Math.random()*this.numberWords);
+        word.word =  this.words[random].word;
       })
 
       this.checkLetterAndPushWords()
-
-      // clearInterval(this.checkLetterInterval)
     },
 
     // funkcja do zmiennej timer (do metody setInterval())
@@ -773,19 +748,19 @@ export default {
     // przekazywac dane do tablicy, ktora jest potrzebna do wykresow , aż czas bedzie rowny 0
     // function for use in timer
     timerFunction(){
-      if(this.timeSpent == 1){
+      if(this.timeSpent === 1){
         this.isStopTime = false;
         this.AFKdetectorEnabled = false;
-        this.reloaded = false
+        this.isReloaded = false
 
         this.isEndTest = true;
         this.opacityStart.opacity = 0;
         this.disabled = true;
-        this.wordsPerMinuteEnd = this.wordsPerMinute
-        this.accuracyEnd = this.accuracy
+        this.wordsPerMinuteScore = this.wordsPerMinute
+        this.accuracyScore = this.accuracy
 
         if(this.useOnceAfterTimeZero) {
-          this.sendBestUserStats()
+          this.updateUserStats()
           this.useOnceAfterTimeZero = false
         }
       }
@@ -814,15 +789,12 @@ export default {
         'opacity': '.5'
       };
 
-      // this.checkLetterInterval = setInterval(this.checkLetterAndPushWords,0)
-
       if(this.isStopTime === false) {
         this.timer = setInterval(this.timerFunction, 1000)
       }
 
       this.isStopTime = true;
       this.marginLineBehindLetter.animationIterationCount = 0;
-
 
       // podświetlanie klawiszy, ktore zostana naciśnięte (dla klawiatury ekranowej)
       // backlight of the keys to be pressed (for screen keyboard)
@@ -899,10 +871,10 @@ export default {
 
     // zamyka lub wyswietla ustawienia
     // exits or displays settings
-    showLayerSett(){
+    showLayerSettings(){
       this.isLayerTopUsers = false;
-      this.isLayerSett = !this.isLayerSett;
-      this.isShowMain = !this.isShowMain;
+      this.isLayerSettingsOpen = !this.isLayerSettingsOpen;
+      this.isMainOn = !this.isMainOn;
       this.isAlertSuccess = false;
       this.reload();
     },
@@ -955,13 +927,13 @@ export default {
     // ukrycie lub pokazanie wynikow na żywo
     // hide or show live results
     showLiveScore(){
-      if(this.isShowScore === 'OFF'){
-        this.isShowScore = 'ON'
-        this.isShowScoreBool = true
+      if(this.isScoreOn === 'OFF'){
+        this.isScoreOn = 'ON'
+        this.isScoreOnBoolean = true
       }
       else{
-        this.isShowScore = 'OFF'
-        this.isShowScoreBool = false
+        this.isScoreOn = 'OFF'
+        this.isScoreOnBoolean = false
       }
       this.isAlertSuccess = true
       setTimeout(() => this.isAlertSuccess = false, 2000)
@@ -970,13 +942,13 @@ export default {
     // ukrycie lub pokazanie klawiatury ekranowej
     // hide or show screen keyboard
     showKeyboardFunction(){
-      if(this.isShowKeyboard === 'OFF'){
-        this.isShowKeyboard = 'ON'
-        this.isShowKeyboardBool = true
+      if(this.isKeyboardOn === 'OFF'){
+        this.isKeyboardOn = 'ON'
+        this.isKeyboardOnBoolean = true
       }
       else{
-        this.isShowKeyboard = 'OFF'
-        this.isShowKeyboardBool = false
+        this.isKeyboardOn = 'OFF'
+        this.isKeyboardOnBoolean = false
       }
       this.isAlertSuccess = true
       setTimeout(() => this.isAlertSuccess = false, 2000)
@@ -1059,7 +1031,7 @@ export default {
       this.wpmChartArray = [];
       this.wpmChartTimeArray = [];
 
-      this.reloaded = true
+      this.isReloaded = true
 
       this.loadWords();
 

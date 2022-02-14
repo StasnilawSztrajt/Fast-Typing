@@ -19,7 +19,7 @@
 export default {
     name: 'LanguagesSettings',
     props: {
-        languagesArray:    Array,
+        languagesArray: Array,
     },
     methods: {
         changeLanguage(lang){

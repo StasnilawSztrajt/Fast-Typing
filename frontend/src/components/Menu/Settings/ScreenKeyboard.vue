@@ -84,11 +84,11 @@ export default {
         draging(keyboard){
             let doc = document.getElementById(keyboard);
             if(this.pickedUp){
-                if(doc.offsetTop < 0){
-                    return doc.style.top = 1 + 'px';
+                if(doc.offsetTop < 20){
+                    return doc.style.top = 30 + 'px';
                 }
-                else if(doc.offsetLeft < 0){
-                    return doc.style.left = 0 + 'px';
+                else if(doc.offsetLeft < 20){
+                    return doc.style.left = 30 + 'px';
                 }
                 else if(doc.offsetTop + this.heightKeyboard > window.innerHeight){
                     return doc.style.top = (window.innerHeight - this.heightKeyboard) + 'px';

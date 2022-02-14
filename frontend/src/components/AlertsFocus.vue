@@ -1,18 +1,18 @@
 <template>
   <div class="Alerts">
-      <div class="alertFocusBackGround"></div>
-      <div class="alertFocus" @click="focusInputOnClick">click on the words to get focus</div>
+    <div class="alertFocusBackGround"></div>
+    <div class="alertFocus" @click="focusInputOnClick">click on the words to get focus</div>
   </div>
 </template>
 
 <script>
 export default {
-    name: 'Alerts',
-    methods: {
-        focusInputOnClick(){
-            this.$emit('focus-input-on-click')
-        }
+  name: 'Alerts',
+  methods: {
+    focusInputOnClick(){
+      this.$emit('focus-input-on-click')
     }
+  }
 }
 </script>
 

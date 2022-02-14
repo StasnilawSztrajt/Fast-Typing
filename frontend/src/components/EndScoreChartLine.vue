@@ -14,10 +14,10 @@ export default defineComponent({
       this.renderChart({
         labels: this.wpmChartTimeArray,
         datasets: [
-            {
+          {
             label: 'wpm',
             data: this.wpmChartArray
-            }
+          }
         ]
       })
   },

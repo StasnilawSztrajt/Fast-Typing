@@ -8,23 +8,23 @@
             class="chartLine"
         />
         <div class="elements">
-            <div class="element" v-if="IDuser != '' && timeSpentPlus === 14">
+            <div class="element" v-if="user_id && timeSpentPlus === 14">
                 Record words per minute:
                 <div class="element-info">
                     {{ userInfo.bestWPM15 }}wpm
                 </div>
             </div>
-            <div class="element" v-if="IDuser != ''  && timeSpentPlus === 14">
+            <div class="element" v-if="user_id  && timeSpentPlus === 14">
                 Record accuracy:
                 <div class="element-info">
                     {{ userInfo.accuracy15 }}
                 </div>
             </div>
-            <div class="element" v-if="IDuser != '' && timeSpentPlus === 59">
+            <div class="element" v-if="user_id && timeSpentPlus === 59">
                 Record words per minute:
                 <div class="element-info">{{ userInfo.bestWPM60 }}wpm</div>
             </div>
-            <div class="element" v-if="IDuser != '' && timeSpentPlus === 59">
+            <div class="element" v-if="user_id && timeSpentPlus === 59">
                 Record accuracy:
                 <div class="element-info">{{ userInfo.accuracy60 }}</div>
             </div>
@@ -65,7 +65,7 @@ export default {
         visableLiveScore: Boolean,
         userInfo: Object,
         timeSpentPlus: Number,
-        IDuser: String,
+        user_id: [String, Object],
         wpmChartTimeArray: Array,
         wpmChartArray: Array,
         isEndTest: Boolean,

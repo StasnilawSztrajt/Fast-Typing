@@ -5,33 +5,26 @@
         FastTyping
       </span>
     </router-link>
-    <router-link class="router" to="/visit/">
+    <router-link class="router" to="/visit">
       <i class="fas fa-question"></i>
     </router-link>
-    <router-link class="router" to="/topUsers/">
+    <router-link class="router" to="/top-users">
       <i class="fas fa-tachometer-alt"></i>
     </router-link>
-    <router-link class="router" to="/faq/">
+    <router-link class="router" to="/faq">
       <i class="fas fa-headset"></i>
     </router-link>
     <router-link class="router" to="/login">
       <i class="fas fa-sign-in-alt"></i>
       <span class="username">
-        {{$cookies.get('user').username ? $cookies.get('user').username : ''}}
+        {{$cookies.get('user') ? $cookies.get('user').username : ''}}
       </span>
     </router-link>
   </nav>
 </template>
 
-<script>
-export default {
-
-}
-</script>
-
 <style lang="scss">
 @import '../../scss/variables';
-
 
 nav{
     text-align: center;

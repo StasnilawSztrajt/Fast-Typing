@@ -58,10 +58,11 @@
         <button type="submit" class="btn" @click="register">Register</button>
       <p class="lead">Have an Account? <router-link to="/login" class="router">Login</router-link></p>
       <p><router-link to="/" class="router">Main page</router-link></p>
-      <div v-if="validationError" class="validation-alert mt-112" role="alert">
+      <div v-show="validationError" style="color: red;" role="alert">
         <span class="block sm:inline">{{ validationText }}</span>
-        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-        </span>
+      </div>
+      <div v-show="!validationError" style="color: red;" role="alert">
+        <span class="block sm:inline">&nbsp;</span>
       </div>
     </div>
   </div>
@@ -209,15 +210,13 @@ body{
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 100%;
-        height: 90vh;
-
-
+        width: 100vw;
+        height: 100vh;
 
         .register{
             background-color: #2c2828;
             border-radius: 25px;
-            width: 25vw;
+            width: 40vw;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -313,5 +312,29 @@ body{
             }
         }
     }
+}
+
+@media screen and (max-width: 1500px) and(min-width: 1025px){
+  .register{
+    width: 50vw;
+  }
+}
+
+@media screen and (max-width: 1024px) and(min-width: 769px){
+  .register{
+    width: 70vw;
+  }
+}
+
+@media screen and (max-width: 768px) and(min-width: 481px){
+  .register{
+    width: 80vw;
+  }
+}
+
+@media screen and (max-width: 480px) and(min-width: 320px){
+  .register{
+    width: 90vw;
+  }
 }
 </style>

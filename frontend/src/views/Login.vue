@@ -33,6 +33,12 @@
       <p class="lead">
           No Account? <router-link to="/register" class="router">Register</router-link>
       </p>
+      <div v-show="loginError" style="color: red;" role="alert">
+        <span class="block sm:inline">Incorrect login or password</span>
+      </div>
+      <div v-show="!loginError" style="color: red;" role="alert">
+        <span class="block sm:inline">&nbsp;</span>
+      </div>
       <p><router-link to="/" class="router">Go back to the main page</router-link></p>
       </div>
   </div>

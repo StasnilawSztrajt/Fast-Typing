@@ -1,7 +1,6 @@
 <template>
     <div class="forLearnS settings">
         <h1>Learning to write </h1>
-
         <div class="forLearn">
             <div
                 v-for="(char,index) in alphabetArray"

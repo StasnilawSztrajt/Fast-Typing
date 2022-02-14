@@ -1,7 +1,7 @@
 <template>
   <div class="keyboardS settings">
     <h1>Screen keyboard <span class="tips" @click="showAlphabetTip"> <i class="fas fa-lightbulb"></i>  &nbsp;tip</span></h1>
-    <div class="button" @click="showKeyboardFunction">{{ isShowKeyboard }}</div>
+    <div class="button" @click="showKeyboardFunction">{{ isKeyboardOn }}</div>
     <h3>Select layout keyboard</h3>
     <!-- niby mozna tu bylo zrobic tablice i v-forem to zrobic , ale stwierdzilem ze dla 4 elementow sie nie oplaca -->
     <button class="button-layout" @click="changeKeyboardLayout(keyboardQWERTY)">QWERTY</button>
@@ -15,7 +15,7 @@
 export default {
   name: 'ScreenKeyboardSettings',
   props: {
-    isShowKeyboard:      String,
+    isKeyboardOn:      String,
     keyboardQWERTYY:   Array,
     keyboardDVORAK:    Array,
     keyboardCOLEMAK:   Array,

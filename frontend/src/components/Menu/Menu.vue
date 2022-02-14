@@ -1,16 +1,23 @@
 <template>
     <nav>
-        <div class="navElements" v-show="!isLayerSett || !isLayerTopUsers">
-        <router-link to="/"><span>FastTyping</span></router-link>
-        <i class="fas fa-cog" @click="showLayerSett"></i>
-        <router-link to="/visit"><i class="fas fa-question"></i></router-link>
-        <router-link to="/topUsers"><i class="fas fa-tachometer-alt"></i></router-link>
-        <router-link to="/faq"><i class="fas fa-headset"></i></router-link>
-        <router-link to="/login">
-            <i class="fas fa-sign-in-alt"></i>
-            <span class="username">{{ userInfo.username }}</span>
-        </router-link>
-
+        <div class="navElements" v-show="!isLayerSettingsOpen">
+            <router-link to="/">
+                <span>FastTyping</span>
+            </router-link>
+            <i class="fas fa-cog" @click="showLayerSettings"></i>
+            <router-link to="/visit">
+                <i class="fas fa-question"></i>
+            </router-link>
+            <router-link to="/top-users">
+                <i class="fas fa-tachometer-alt"></i>
+            </router-link>
+            <router-link to="/faq">
+                <i class="fas fa-headset"></i>
+            </router-link>
+            <router-link to="/login">
+                <i class="fas fa-sign-in-alt"></i>
+                <span class="username">{{ userInfo.username }}</span>
+            </router-link>
         </div>
     </nav>
 </template>
@@ -19,12 +26,12 @@
 export default {
     name: 'Menu',
     props: {
-        isLayerSett:     Boolean,
-        userInfo:      Object,
+        isLayerSettingsOpen: Boolean,
+        userInfo: Object,
     },
     methods: {
-        showLayerSett(){
-            this.$emit('show-layer-sett')
+        showLayerSettings(){
+            this.$emit('show-layer-settings')
         },
     },
 }

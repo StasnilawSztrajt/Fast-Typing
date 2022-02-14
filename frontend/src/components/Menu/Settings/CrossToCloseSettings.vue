@@ -1,5 +1,5 @@
 <template>
-    <div class="flexCross" @click="showLayerSett">
+    <div class="flexCross" @click="showLayerSettings">
         <i class="fas fa-times sett cross"></i>
     </div>
 </template>
@@ -8,8 +8,8 @@
 export default {
     name: 'CrossToCloseSettings',
     methods: {
-        showLayerSett(){
-            this.$emit('show-layer-sett')
+        showLayerSettings(){
+            this.$emit('show-layer-settings')
         }
     }
 }

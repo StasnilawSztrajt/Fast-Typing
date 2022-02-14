@@ -10,7 +10,7 @@
       <h1 class="info-h1">INFO</h1>
       <div class="info-elements">
         <p class="info-element">email: <span>{{ user.email }}</span></p>
-        <p class="info-element">ID user: <span>{{ user.id }}</span></p>
+        <p class="info-element">user id: <span>{{ user.id }}</span></p>
         <p class="info-element">Date registered: <span>{{ user.createdAt }}</span></p>
         <div class="info-best">
           <p>Record for 15 seconds : <span class="info-user">{{ user.bestWPM15 }}wpm with {{ user.accuracy15 }}% accuracy</span></p>

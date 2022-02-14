@@ -6,7 +6,7 @@
       </div>
       <div class="topUsersLayer" v-else>
         <MenuForSubRoutes />
-        <h1><i class="fas fa-crown"></i> Global Ranking users FastTyping<i class="fas fa-crown"></i></h1>
+        <h1><i class="fas fa-crown"></i> Global Ranking users FastTyping <i class="fas fa-crown"></i></h1>
         <div class="topUsers">
           <div class="topUsers15">
             <tr class="titleTr">
@@ -62,7 +62,6 @@ export default {
     }
   },
   async created(){
-    console.log(typeof this.topUsers15)
     await axios.get(`${API_URL}/users`)
     .then(res =>{
       this.users = res.data

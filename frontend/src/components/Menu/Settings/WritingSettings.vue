@@ -25,10 +25,7 @@ export default {
 <style lang="scss">
 @import '../../../scss/sett.scss';
 .writingS{
-    text-align: center;
-    .tows{
-
-    }
+  text-align: center;
 }
 
 </style>

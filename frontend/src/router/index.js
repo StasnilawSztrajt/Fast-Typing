@@ -1,5 +1,5 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import writeTestApp from '../views/writeTestApp.vue'
+import Home from '../views/Home.vue'
 import Visit from '../views/Visit.vue'
 import FAQ from '../views/FAQ.vue'
 import Dashboard from '../views/Dashboard.vue'
@@ -10,8 +10,8 @@ import TopUsers from '../views/TopUsers.vue'
 const routes = [
     {
         path: '/',
-        name: 'writeTestApp',
-        component: writeTestApp
+        name: 'Home',
+        component: Home
     },
     {
         path: '/Visit',
@@ -39,7 +39,7 @@ const routes = [
         component: Register,
     },
     {
-        path: '/topUsers',
+        path: '/top-users',
         name: 'TopUsers',
         component: TopUsers,
     },

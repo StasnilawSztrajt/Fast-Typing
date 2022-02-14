@@ -1,7 +1,7 @@
 <template>
   <div class="live-scoreS settings">
     <h1 class="score-h1">Live score</h1>
-    <div class="button" @click="showLiveScore">{{ isShowScore }}</div>
+    <div class="button" @click="showLiveScore">{{ isScoreOn }}</div>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 export default {
   name: 'LiveScoreSettings',
   props: {
-    isShowScore: String,
+    isScoreOn: String,
   },
   methods: {
     showLiveScore(){
@@ -23,9 +23,7 @@ export default {
 @import '../../../scss/sett.scss';
 .live-scoreS{
     text-align: left;
-    .live-score{
 
-    }
 }
 
 </style>

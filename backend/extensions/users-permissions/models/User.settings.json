@@ -12,7 +12,8 @@
   "attributes": {
     "username": {
       "type": "string",
-      "minLength": 3,
+      "minLength": 6,
+      "maxLength": 30,
       "unique": true,
       "configurable": false,
       "required": true
@@ -20,6 +21,7 @@
     "email": {
       "type": "email",
       "minLength": 6,
+      "maxLength": 30,
       "configurable": false,
       "required": true
     },
@@ -30,6 +32,7 @@
     "password": {
       "type": "password",
       "minLength": 6,
+      "maxLength": 30,
       "configurable": false,
       "private": true
     },
@@ -60,16 +63,20 @@
       "configurable": false
     },
     "bestWPM15": {
-      "type": "float"
+      "type": "float",
+      "max": 10000
     },
     "bestWPM60": {
-      "type": "float"
+      "type": "float",
+      "max": 10000
     },
     "accuracy15": {
-      "type": "float"
+      "type": "float",
+      "max": 10000
     },
     "accuracy60": {
-      "type": "float"
+      "type": "float",
+      "max": 10000
     }
   }
 }
